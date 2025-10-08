@@ -1,6 +1,6 @@
 # USF Guest Lecture: Governing Generative and Agentic AI
 
-This repository contains the full teaching package for Dr. Adnan Masood's October 9, 2025 guest lecture at the University of South Florida on governing generative and agentic AI systems. The material blends conceptual framing, quantitative fairness tooling, regulatory guidance, and classroom exercises that can be reused for graduate-level instruction or corporate workshops on responsible AI.
+This repository contains the lecture notes for Dr. Adnan Masood's October 9, 2025 guest lecture at the University of South Florida on governing generative and agentic AI systems. The material blends conceptual framing, quantitative fairness tooling, regulatory guidance, and classroom exercises that can be reused for graduate-level instruction or corporate workshops on responsible AI.
 
 ## Contents
 
