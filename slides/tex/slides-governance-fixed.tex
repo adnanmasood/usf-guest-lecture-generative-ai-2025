@@ -1,0 +1,600 @@
+\documentclass[11pt,aspectratio=169]{beamer}
+
+% ======================
+% Theme & Basic Settings
+% ======================
+\usetheme{Madrid}
+\usecolortheme{seagull}
+\useinnertheme{rounded}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+\setbeamercovered{transparent}
+\usefonttheme{professionalfonts}
+
+% ======================
+% Packages
+% ======================
+\usepackage{ragged2e}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{mathtools, amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{xspace}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+
+% ======================
+% Colors & Helpers
+% ======================
+\definecolor{MasoodBlue}{RGB}{0,73,146}
+\definecolor{MasoodGreen}{RGB}{0,135,90}
+\definecolor{MasoodRed}{RGB}{180,36,36}
+\definecolor{MasoodGold}{RGB}{204,153,0}
+
+\setbeamercolor{title}{fg=MasoodBlue}
+\setbeamercolor{frametitle}{fg=MasoodBlue}
+\setbeamercolor{block title}{bg=MasoodBlue!10,fg=MasoodBlue}
+\setbeamercolor{block body}{bg=MasoodBlue!2,fg=black}
+\setbeamercolor{alerted text}{fg=MasoodRed}
+
+% ======================
+% Title Info
+% ======================
+\title[Governance for Agentic AI]{\texorpdfstring{\textbf{The Hard Edge of Trust: Governing Agentic AI}\\[-2pt]\large Risk, Regulation, and Real-World Controls}{Governance for Agentic AI}}
+\author[\textbf{Adnan Masood, PhD.}]{\texorpdfstring{\textbf{Guest Lecture by Adnan Masood, PhD.}\\Microsoft Regional Director \;|\; AI/ML Engineer \;|\; Author \;|\; Stanford Scholar\\[-2pt]\small \href{mailto:amasood@amp207.hbs.edu}{amasood@amp207.hbs.edu} \;•\; +1 (626) 513-1665}{\textbf{Adnan Masood, PhD.}}}
+\institute[USF]{\texorpdfstring{University of South Florida \;—\; Graduate AI Seminar}{USF}}
+\date{October 9, 2025}
+
+% ======================
+% Convenience Macros
+% ======================
+\newcommand{\Term}[1]{%
+  \begin{frame}
+    \centering\vfill
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}\Huge\textbf{#1}}
+    \vfill
+  \end{frame}
+}
+
+\ifdefined\Definition
+  \renewcommand{\Definition}[2]{%
+    \begin{frame}{#1: \;Definition}
+      \justifying
+      #2
+    \end{frame}
+  }
+\else
+  \newcommand{\Definition}[2]{%
+    \begin{frame}{#1: \;Definition}
+      \justifying
+      #2
+    \end{frame}
+  }
+\fi
+
+
+\newcommand{\Intuition}[3]{%
+  \begin{frame}{#1: \;Intuition \& Example}
+    \justifying
+    \textbf{Intuition.} #2
+    \medskip
+
+    \textbf{Example.} #3
+  \end{frame}
+}
+
+\newcommand{\Horror}[2]{%
+  \begin{block}{#1}
+  \Large \textbf{\alert{#2}}
+  \end{block}
+}
+
+\newcommand{\KPI}[2]{\textbf{#1:} #2\\}
+
+\newcommand{\Equation}[2]{%
+  \begin{block}{#1}
+  \begin{gather*}
+    #2
+  \end{gather*}
+  \end{block}
+}
+
+\newcommand{\tinyref}[1]{\textcolor{black!60}{\scriptsize#1}}
+
+\newcommand{\SECHdr}[1]{\vspace{-2pt}\textbf{\color{MasoodBlue}{#1}}\vspace{2pt}\par}
+
+% ======================
+% Document
+% ======================
+\begin{document}
+
+% ===== Title =====
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% ===== Opening =====
+\begin{frame}{Why this talk?}
+\SECHdr{AI crossed from novelty to infrastructure.}
+\begin{itemize}
+  \item Agentic AI can \emph{read, write, and act}: call tools, move money, write code, buy services, change systems.
+  \item Governance is how we make that power \textbf{reliable, lawful, and fair} at scale.
+\end{itemize}
+\medskip
+\SECHdr{Learning outcomes}
+\begin{enumerate}
+  \item Build a \textbf{taxonomy} of governance concepts and fairness metrics (with equations).
+  \item Recognize \textbf{why it matters} (1-line horror stories from real incidents).
+  \item Map \textbf{regulations $\rightarrow$ controls} you can implement now.
+  \item Practice with an \textbf{exercise}: use case $\rightarrow$ regulation $\rightarrow$ controls $\rightarrow$ recommendation.
+\end{enumerate}
+\tinyref{This material is educational and not legal advice.}
+\end{frame}
+
+% ===== Interactive Ground Rules =====
+\begin{frame}{How we'll run this (interactive class format)}
+\begin{itemize}
+  \item \textbf{Term Triads}: Slide 1 = term only; Slide 2 = definition; Slide 3 = intuition + example.
+  \item \textbf{Think–Pair–Share}: Short prompts; 60–90 seconds reflection; 2–3 minute table discussions.
+  \item \textbf{Cold vs Warm Starts}: I’ll ask for volunteers first, then call randomly.
+  \item \textbf{Artifacts you keep}: AIA template, control catalog, fairness metrics cheat-sheet, role checklists.
+\end{itemize}
+\end{frame}
+
+% ===== Agenda =====
+\begin{frame}{Agenda}
+\begin{columns}[T,onlytextwidth]
+\column{0.52\textwidth}
+\begin{enumerate}
+  \item Taxonomy: governance \& ethics
+  \item Quantitative fairness \& bias
+  \item Why it matters (1-line horror)
+  \item Observability \& controls
+\end{enumerate}
+\column{0.48\textwidth}
+\begin{enumerate}
+  \setcounter{enumi}{4}
+  \item Regulations overview \& timeline
+  \item Agentic AI risks
+  \item Impact by role (exec $\rightarrow$ dev)
+  \item Class exercise \& recommendations
+\end{enumerate}
+\end{columns}
+\end{frame}
+
+% ====== TERM TRIADS ======
+% Governance
+\Term{Governance}
+\Definition{Governance}{\justifying
+\textbf{Governance} is the system of \emph{decision rights, accountability, and processes} that direct AI from idea to decommission, aligning with risk appetite, laws, and values. It answers \emph{who decides, on what basis, with what evidence}.}
+\Intuition{Governance}{Org chart for AI decisions + the playbook to run them.}{An AI Steering Committee approves high-risk deployments; Model Risk signs off before launch; incident review board has kill-switch authority.}
+
+% Compliance
+\Term{Compliance}
+\Definition{Compliance}{\justifying
+\textbf{Compliance} means \emph{meeting binding obligations}: laws (e.g., EU AI Act), regulations, contracts, and internal policies/standards. Evidence is produced via documentation, testing, and audit trails.}
+\Intuition{Compliance}{Prove you did what you said and what was required.}{Keep a technical file, DPIA/AIA, data provenance, bias tests, human-oversight design, plus post-market monitoring logs.}
+
+% Regulation
+\Term{Regulation}
+\Definition{Regulation}{\justifying
+\textbf{Regulation} is external rulemaking by governments/authorities that sets \emph{minimum requirements, prohibitions, and enforcement}. Examples: GDPR Art.\ 22, EU AI Act risk tiers, China’s deep synthesis rules, state bias-audit laws.}
+\Intuition{Regulation}{The floor, not the ceiling.}{Design controls to meet strictest applicable rule; reuse evidence across jurisdictions.}
+
+% Audit
+\Term{Audit}
+\Definition{Audit}{\justifying
+\textbf{Audit} is an independent, evidence-based assessment that \emph{controls exist, are designed well, and operate effectively}. Can be internal, third-party, or regulatory (e.g., notified body).}
+\Intuition{Audit}{Trust, but verify—with artifacts.}{Auditor samples model versions, tests bias metrics, inspects logs, interviews owners, reproduces results.}
+
+% Control
+\Term{Control}
+\Definition{Control}{\justifying
+A \textbf{control} is a specific \emph{preventive, detective, or corrective} mechanism to mitigate a defined risk and meet an objective (policy). Controls are testable and owned.}
+\Intuition{Control}{Seatbelts, airbags, and crash reports for AI.}{Preventive: training data standards; Detective: drift monitors; Corrective: rollback + kill switch.}
+
+% Ethical AI
+\Term{Ethical AI}
+\Definition{Ethical AI}{\justifying
+\textbf{Ethical AI} pursues \emph{values} (fairness, beneficence, autonomy, justice) beyond bare compliance; often operationalized as \emph{Responsible AI} programs with concrete practices.}
+\Intuition{Ethical AI}{“Should we,” not only “can we.”}{Decline a high-accuracy but privacy-invasive feature; add opt-out + consent and redesign data needs.}
+
+% Fairness
+\Term{Fairness}
+\Definition{Fairness}{\justifying
+\textbf{Fairness} is the absence of unjustified, systematic disadvantage for protected groups. It’s quantified by metrics like \emph{statistical parity}, \emph{equalized odds}, and \emph{calibration within groups}.}
+\Intuition{Fairness}{Comparable error/benefit across groups for the task context.}{For hiring, ensure qualified candidates across demographics see similar true positive rates and low disparate impact.}
+
+% Bias
+\Term{Bias}
+\Definition{Bias}{\justifying
+\textbf{Bias} are systematic errors from data, labels, models, or deployment (sampling, measurement, historical, aggregation, evaluation). Distinguished from \emph{intended policy} differences and \emph{legally protected classes}.}
+\Intuition{Bias}{Garbage in, injustice out.}{Legacy credit data penalizes neighborhoods; model learns redlining proxies unless corrected.}
+
+% Transparency
+\Term{Transparency}
+\Definition{Transparency}{\justifying
+\textbf{Transparency} reveals that AI is used and what it does: disclosures, documentation (model cards), and access to meaningful information for affected users or regulators.}
+\Intuition{Transparency}{No surprises; informed use.}{Chatbot explicitly states it is AI; deepfake content is labeled; publish summary of training data sources.}
+
+% Explainability
+\Term{Explainability}
+\Definition{Explainability}{\justifying
+\textbf{Explainability} provides \emph{human-understandable reasons} for outputs (e.g., global feature importances, local explanations). Fit-for-purpose: for developers, regulators, or end users.}
+\Intuition{Explainability}{Make the black box legible to the right audience.}{Provide top features and counterfactuals for a declined loan: “If income +\$5k, debt ratio <35\%, decision flips.”}
+
+% Interpretability
+\Term{Interpretability}
+\Definition{Interpretability}{\justifying
+\textbf{Interpretability} is model structure that is \emph{intrinsically understandable} (e.g., sparse linear models, small trees) vs.\ post-hoc explanations for complex models.}
+\Intuition{Interpretability}{Simple when stakes allow; explain when complexity needed.}{Healthcare triage uses a sparse scorecard with clear thresholds.}
+
+% Observability
+\Term{Observability}
+\Definition{Observability}{\justifying
+\textbf{Observability} is end-to-end telemetry of AI systems: data lineage, model versions, evaluations, runtime metrics (accuracy, drift, bias, hallucination), and decision logs enabling \emph{monitoring, diagnosis, and audit}.}
+\Intuition{Observability}{If you can’t see it, you can’t govern it.}{Dashboards track PSI drift, TPR/FPR by group, calibration error, toxicity, PII leaks, and tool-use traces for agents.}
+
+% Human-in-the-loop
+\Term{Human-in-the-loop}
+\Definition{Human-in-the-loop}{\justifying
+\textbf{HITL} embeds human judgment to approve, calibrate, or overturn AI decisions, with training, time, and authority to act; required in many high-risk settings.}
+\Intuition{Human-in-the-loop}{\emph{Meaningful} oversight, not rubber stamps.}{A clinician must confirm an AI triage recommendation before action; overrides are logged and analyzed.}
+
+% AIA
+\Term{Algorithmic Impact Assessment (AIA)}
+\Definition{Algorithmic Impact Assessment (AIA)}{\justifying
+\textbf{AIA} is a structured, pre-deployment risk assessment of an AI use case: context, stakeholders, harms/benefits, mitigations, tests, oversight, and post-market plan; maintained as a living artifact.}
+\Intuition{AIA}{An auditable design review for societal risk.}{Public benefits scoring AIA triggers bias testing, appeal routes, and strict logging requirements.}
+
+% ====== QUANTITATIVE FAIRNESS ======
+\begin{frame}{Quantitative fairness metrics (binary classification)}
+\small
+\Equation{Confusion-matrix groups}{%
+\begin{matrix}
+& & \text{Actual }1 & \text{Actual }0\\
+\text{Pred }1 & & \text{TP} & \text{FP}\\
+\text{Pred }0 & & \text{FN} & \text{TN}
+\end{matrix}
+}
+\Equation{Statistical parity difference (SPD)}{%
+\mathrm{SPD} = \Pr(\hat{Y}=1\mid A=a) - \Pr(\hat{Y}=1\mid A=b)
+}
+\Equation{Disparate impact ratio (DIR, 80\% rule)}{%
+\mathrm{DIR} = \dfrac{\Pr(\hat{Y}=1\mid A=a)}{\Pr(\hat{Y}=1\mid A=b)}\quad \text{(acceptable if } \approx 0.8\text{–}1.25)
+}
+\Equation{Equal opportunity / TPR parity}{%
+\Pr(\hat{Y}=1\mid Y=1, A=a) \approx \Pr(\hat{Y}=1\mid Y=1, A=b)
+}
+\Equation{Equalized odds}{%
+\begin{cases}
+\Pr(\hat{Y}=1\mid Y=1, A=a) \approx \Pr(\hat{Y}=1\mid Y=1, A=b)\\
+\Pr(\hat{Y}=1\mid Y=0, A=a) \approx \Pr(\hat{Y}=1\mid Y=0, A=b)
+\end{cases}
+}
+\Equation{Calibration within groups}{%
+\Pr(Y=1\mid s, A=a) \approx \Pr(Y=1\mid s, A=b) \quad \text{for score } s\in[0,1]
+}
+\tinyref{Note: metrics can be mutually incompatible; choose per domain, harm model, and law.}
+\end{frame}
+
+\begin{frame}{Fairness trade-offs \& selection}
+\begin{itemize}
+  \item \textbf{Trade-off theorem}: can’t generally satisfy calibration, parity of error rates, and parity of base rates simultaneously.
+  \item \textbf{Select metrics by context}: Lending (ECOA) often prioritizes disparate impact; hiring prioritizes equal opportunity; safety-critical prioritizes error asymmetry.
+  \item \textbf{Set thresholds}: e.g., $|\mathrm{SPD}|\le 0.05$, $\mathrm{DIR}\in[0.8,1.25]$, $\Delta\mathrm{TPR}\le 0.03$.
+  \item \textbf{Mitigate}: reweighting, constraints, post-processing, feature review, label audit, policy changes.
+\end{itemize}
+\end{frame}
+
+% ===== WHY IT MATTERS (HORROR STORIES) =====
+\begin{frame}{Why governance matters: one-line horror stories (real incidents)}
+\Horror{Welfare \& public services}{Algorithmic fraud scoring falsely flagged thousands of families; government resigned.}
+\Horror{Hiring}{A resume screener learned historical bias; women systematically down-ranked; tool scrapped.}
+\Horror{Credit}{A card limit model allegedly gave women far lower limits than comparable men; regulator inquiries ensued.}
+\Horror{Policing}{Predictive policing amplified over-policing in specific neighborhoods; civil rights lawsuits followed.}
+\Horror{Autonomy}{A self-driving test vehicle failed to detect a pedestrian; fatality; entire program halted.}
+\Horror{Education}{An exam grading algorithm downgraded disadvantaged students; policy reversed after protests.}
+\Horror{Real estate}{A pricing model misfired at scale; company took a large write-down and exited the business.}
+\end{frame}
+
+% ===== OBSERVABILITY & CONTROLS =====
+\begin{frame}{From risk to controls: lifecycle view}
+\SECHdr{Map risks to stages}
+\begin{itemize}
+  \item \textbf{Charter}: purpose, benefits/harms, risk appetite, lawful basis.
+  \item \textbf{Data}: provenance, consent, quality, representativeness, PII.
+  \item \textbf{Model}: design, eval plan, explainability, robustness, safety.
+  \item \textbf{Deploy}: human oversight, safeguards, red-teaming, rollback.
+  \item \textbf{Operate}: monitoring, drift, bias, incidents, retraining, sunset.
+\end{itemize}
+\SECHdr{Control types}
+\begin{itemize}
+  \item \textbf{Preventive}: policies, standards, gating checklists, least-privilege.
+  \item \textbf{Detective}: eval harnesses, canaries, SIEM hooks, fairness monitors.
+  \item \textbf{Corrective}: kill switch, feature flags, incident playbooks.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Observability KPIs (examples)}
+\small
+\KPI{Data} {PSI $< 0.2$; missingness within spec; lineage 100\% tracked; consent coverage $> 99\%$.}
+\KPI{Model perf}{AUC/accuracy by segment; $\Delta$TPR/FPR across groups; ECE (calibration) $< 0.02$.}
+\KPI{Safety}{Adversarial robustness score; jailbreak detection rate; toxicity rate $< 0.1\%$.}
+\KPI{Privacy}{PII leakage rate $<10^{-6}$/output; k-anonymity for logs; access audited.}
+\KPI{Ops}{MTTD/MTTR for drift; rollback $<15$ min; on-call coverage; change management adherence.}
+\KPI{Governance}{AIA completion; sign-offs present; retraining cadence; incident postmortems completed.}
+\end{frame}
+
+% ===== AGENTIC AI =====
+\Term{Agentic AI}
+\Definition{Agentic AI}{\justifying
+\textbf{Agentic AI} performs multi-step plans with tool use and memory (browse, code, transact, control devices). Risks: \emph{specification gaming}, \emph{prompt injection}, \emph{over-permissioned tools}, \emph{data exfiltration}, \emph{unsafe autonomy}.}
+\Intuition{Agentic AI}{“Software that writes software and executes it.”}{A procurement agent drafts a contract, negotiates, and places an order—within spend and vendor constraints.}
+
+\begin{frame}{Why agents raise the stakes}
+\begin{itemize}
+  \item \textbf{Action surface}: Not just wrong text—\emph{wrong actions}. Money moved; code deployed; systems altered.
+  \item \textbf{Non-determinism}: Same prompt $\rightarrow$ different actions; requires guardrails and approvals.
+  \item \textbf{Supply chain}: Models, prompts, tools, plugins, retrieval indices—each a risk node.
+  \item \textbf{Security blend}: AppSec + MLOps + SecOps. Need \emph{policy engines}, sandboxes, and ephemeral credentials.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Minimum controls for agentic AI (starter pack)}
+\begin{columns}[T,onlytextwidth]
+\column{0.52\textwidth}
+\begin{block}{Policy \& guardrails}
+\begin{itemize}
+  \item Allow-list tools; deny raw shell unless sandboxed.
+  \item Action approval thresholds; two-person rule for high-risk.
+  \item Rate limits; budget caps; scope-limited API keys.
+  \item Content safety filters; PII scrub; watermarking outputs.
+\end{itemize}
+\end{block}
+\column{0.48\textwidth}
+\begin{block}{Observability \& response}
+\begin{itemize}
+  \item Full \emph{action logs} with inputs/outputs/artifacts linked.
+  \item Real-time anomaly detection (policy violations).
+  \item Evals for \emph{goal drift}, hallucination, jailbreaking.
+  \item Big red button: \emph{pause agent} and revoke creds.
+\end{itemize}
+\end{block}
+\end{columns}
+\end{frame}
+
+% ===== REGULATIONS OVERVIEW =====
+\begin{frame}{Key regulations \& frameworks (selected)}
+\small
+\begin{tabular}{p{3.2cm}p{10.2cm}}
+\toprule
+\textbf{Regime} & \textbf{Core ideas (non-exhaustive)}\\
+\midrule
+EU AI Act (2024–27) & Risk tiers (prohibited/high/limited/minimal); high-risk obligations: risk mgmt, data quality, technical file, human oversight, accuracy/robustness; GPAI/foundation-model duties; CE-like conformity; big fines.\\
+GDPR Art.\ 22 (2018) & Limits on solely automated decisions with significant effects; rights to information and human review; DPIAs for high-risk processing.\\
+China (2022–2023) & Algorithmic recommender rules; deep synthesis (labeling); generative AI measures (registration, content controls, security review).\\
+U.S. (patchwork) & NIST AI RMF 1.0 (2023); Executive Order on AI (2023); NYC Local Law 144 (hiring bias audits); Colorado SB 205 (AI duties); sector enforcement (FTC/CFPB/FDA/EEOC).\\
+UK (2023–) & Principles-first (safety, transparency, fairness, accountability, contestability) via sector regulators; AI Safety Institute for frontier risks.\\
+Canada AIDA (proposed) & High-impact AI obligations (risk assessment, mitigation, incident reporting) with an AI/data commissioner.\\
+OECD (2019), UNESCO (2021) & Global principles on trustworthy/rights-respecting AI; soft-law anchors adopted by many states.\\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Timeline (anchor milestones)}
+\small
+\begin{tabular}{p{2.8cm}p{10.8cm}}
+\toprule
+\textbf{Year} & \textbf{Event}\\
+\midrule
+2018 & GDPR in force (automated decision rights).\\
+2019 & OECD AI Principles adopted; Canada ADM Directive (AIA for gov).\\
+2021 & EU proposes AI Act; UNESCO global ethics recommendation.\\
+2022 & China algorithmic recommender rules in effect; U.S. AI Bill of Rights (blueprint).\\
+2023 & EU AI Act finalized; U.S. Executive Order on AI; NYC bias audit law effective; China generative AI measures.\\
+2024--27 & EU AI Act phased application (bans $\rightarrow$ GPAI $\rightarrow$ high-risk).\\
+2026 & South Korea AI Framework Act in force (high-impact focus).\\
+\bottomrule
+\end{tabular}
+\tinyref{Build for the strictest regime you face; reuse evidence across jurisdictions.}
+\end{frame}
+
+% ===== MAPPING REG -> CONTROLS =====
+\begin{frame}{Map obligations to controls (EU AI Act $\rightarrow$ your backlog)}
+\small
+\begin{tabular}{p{5.5cm}p{8.2cm}}
+\toprule
+\textbf{Obligation} & \textbf{Implementable control(s)}\\
+\midrule
+Risk management system & AIA template; harm catalog; sign-offs; risk register with owners/SLAs.\\
+High-quality data & Datasheets; provenance; representativeness tests; label audits; bias-aware sampling.\\
+Technical documentation & Model card; data card; evaluation reports; versioned pipelines; reproducibility scripts.\\
+Human oversight & HITL workflow; appeal/override UI; training and competence evidence; RACI.\\
+Accuracy/robustness & Eval harness; adversarial tests; stress tests; calibration; acceptance thresholds.\\
+Post-market monitoring & Telemetry; drift \& bias monitors; incident playbooks; retraining cadences.\\
+Transparency & User notices; AI interaction badges; deepfake labels; accessible explanations.\\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+% ===== INDUSTRY USE CASES =====
+\begin{frame}{Industry use cases where governance bites hardest}
+\small
+\begin{tabular}{p{3.4cm}p{5.2cm}p{5.3cm}}
+\toprule
+\textbf{Sector} & \textbf{Typical AI Use} & \textbf{Governance pinch points}\\
+\midrule
+Healthcare & Diagnosis, triage, prior auth & Safety/efficacy, bias, informed consent, accountability, auditability.\\
+Finance & Underwriting, AML, collections & Fair lending, explainability, model risk, adverse action notices.\\
+Employment & Sourcing, screening, scheduling & Bias audits, candidate notice, disability accommodations, transparency.\\
+Public sector & Benefits, fraud, policing & Fundamental rights, due process, appeal routes, proportionality.\\
+Transport & Autonomy, dispatch & Functional safety, incident reporting, cybersecurity-by-design.\\
+Platforms & Recommenders, moderation & DSA-like risk assessments, child safety, deepfake labeling, content harm.\\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+% ===== ROLES =====
+\begin{frame}{Impact by role — what changes for \emph{you}}
+\begin{columns}[T,onlytextwidth]
+\column{0.5\textwidth}
+\begin{block}{Executives / Product}
+\begin{itemize}
+  \item Set risk appetite; empower an AI Risk Committee.
+  \item Fund observability; require AIA sign-off pre-launch.
+  \item Make metrics board-level (fairness, incidents, residual risk).
+\end{itemize}
+\end{block}
+\begin{block}{Managers}
+\begin{itemize}
+  \item Own control operation evidence; keep tech file current.
+  \item Staff on-call for AI incidents; run postmortems.
+\end{itemize}
+\end{block}
+\column{0.5\textwidth}
+\begin{block}{Engineers / Data Scientists}
+\begin{itemize}
+  \item Build eval harnesses; track metrics by segment.
+  \item Design for explainability, rollback, and HITL.
+  \item Red-team models; fix issues; document changes.
+\end{itemize}
+\end{block}
+\begin{block}{Security / Legal / Compliance}
+\begin{itemize}
+  \item Policy engine, sandboxing, least privilege, logging.
+  \item DPIAs/AIA; vendor clauses; incident reporting.
+\end{itemize}
+\end{block}
+\end{columns}
+\end{frame}
+
+% ===== INTERACTIVE PROMPTS =====
+\begin{frame}{Think–Pair–Share (1): Which fairness metric would you choose?}
+\begin{itemize}
+  \item \textbf{Use case}: University scholarship recommender; risk of excluding qualified low-income students.
+  \item \textbf{Prompt}: Pick a metric (e.g., equal opportunity vs.\ parity) and defend it in 1 minute.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Think–Pair–Share (2): When should a human be in the loop?}
+\begin{itemize}
+  \item \textbf{Use case}: Oncology triage assistant suggesting care pathways.
+  \item \textbf{Prompt}: Where is HITL mandatory, what authority, and what evidence proves “meaningful oversight”?
+\end{itemize}
+\end{frame}
+
+% ===== CLASS EXERCISE =====
+\begin{frame}{Class exercise (teams of 3–5)}
+\begin{enumerate}
+  \item \textbf{Pick a use case}: Hiring, credit, triage, policing, AV, content moderation, etc.
+  \item \textbf{Pick a regime}: EU AI Act, GDPR, NYC audit law, Colorado SB 205, China deep synthesis, NIST RMF.
+  \item \textbf{Find controls}: Preventive, detective, corrective—map to obligations.
+  \item \textbf{Recommend}: Ship / delay / cancel? What go-live gates and SLOs?
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Exercise template (fill during breakout)}
+\small
+\begin{tabular}{p{3.2cm}p{10.2cm}}
+\toprule
+\textbf{Field} & \textbf{Your entry}\\
+\midrule
+Use case & Domain, affected users, decisions made.\\
+Harms/benefits & Top 3 potential harms; expected benefits.\\
+Regime(s) & Cite the most constraining obligations.\\
+Controls & For each obligation, list tests/telemetry/designs.\\
+Ownership & RACI: who approves, who operates controls.\\
+Go/no-go & Launch gates, SLOs, rollback plan, comms.\\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+% ===== SUMMARY =====
+\begin{frame}{Summary — five takeaways}
+\begin{enumerate}
+  \item \textbf{Governance} = decision rights + process + evidence; \textbf{controls} make it real.
+  \item \textbf{Fairness is measurable} but contextual; pick metrics, set thresholds, test continuously.
+  \item \textbf{Observability} is non-negotiable: logs, evals, drift, incidents, and retraining.
+  \item \textbf{Regulations} converge on risk management, transparency, oversight, and documentation.
+  \item \textbf{Agents raise stakes}: add policy engines, allow-lists, approvals, and kill switches.
+\end{enumerate}
+\end{frame}
+
+% ===== RESOURCES =====
+\begin{frame}{Artifacts you can reuse}
+\begin{itemize}
+  \item AIA template (risk register fields, sign-offs, tests).
+  \item Control catalog (preventive/detective/corrective examples).
+  \item Fairness metrics cheat-sheet (formulas \& thresholds).
+  \item Role checklists (Exec/Product/Manager/Engineer/Compliance).
+\end{itemize}
+\end{frame}
+
+% ===== CONTACT =====
+\begin{frame}{Thank you}
+\Large Questions? Discussion? \par
+\medskip
+\small
+\textbf{Adnan Masood, PhD.}\\
+\href{mailto:amasood@amp207.hbs.edu}{amasood@amp207.hbs.edu} \;•\; +1 (626) 513-1665\\
+Twitter/Blog/Books: search \emph{Adnan Masood AI}\\
+\medskip
+\textit{“Trust is a feature. Governance builds it.”}
+\end{frame}
+
+% ===== APPENDIX =====
+\appendix
+\begin{frame}{Appendix: more bias sources}
+\begin{itemize}
+  \item \textbf{Sampling} (coverage, survivorship), \textbf{measurement} (sensor/label error), \textbf{historical} (societal patterns), \textbf{aggregation} (Simpson’s paradox), \textbf{deployment} (population shift), \textbf{feedback loop} (performative effects).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Appendix: LLM/Agent eval ideas}
+\begin{itemize}
+  \item \textbf{Hallucination rate} (faithfulness to sources), \textbf{toxicity}, \textbf{prompt injection susceptibility}, \textbf{jailbreak success}, \textbf{PII leakage}, \textbf{tool-use accuracy}, \textbf{specification gaming tests}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Appendix: Red-teaming menu}
+\small
+\begin{tabular}{p{4.8cm}p{8.8cm}}
+\toprule
+\textbf{Threat} & \textbf{Test pattern}\\
+\midrule
+Prompt injection & Indirect injections via retrieved docs; HTML/CSV payloads; role confusion.\\
+Data exfiltration & Secrets in prompts; credentials in env; RAG index leakage.\\
+Unsafe actions & Overspend attempts; unsafe tool sequences; bypass approvals.\\
+Content harm & Harassment, hate, self-harm, misinformation prompts.\\
+Privacy & Quasi-identifier reconstruction; membership inference.\\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Appendix: DPIA vs AIA (quick contrast)}
+\begin{tabular}{p{5.5cm}p{8.2cm}}
+\toprule
+\textbf{DPIA (privacy)} & \textbf{AIA (algorithmic)}\\
+\midrule
+Focus: personal data risk & Focus: decision/effect risk (incl.\ non-personal)\\
+Law: GDPR/DP laws & AI-specific laws/policies (EU AI Act, state laws)\\
+Artifacts: data flows, lawful basis & Artifacts: metrics, evals, oversight, incidents\\
+Outcomes: mitigations, accept residual & Outcomes: go/no-go, launch gates, SLOs\\
+\bottomrule
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Appendix: equations \& thresholds (cheat-sheet)}
+\small
+\begin{itemize}
+  \item \(\mathrm{SPD} = \Pr(\hat{Y}=1|A=a) - \Pr(\hat{Y}=1|A=b)\). Target $|\mathrm{SPD}|\le 0.05$.
+  \item \(\mathrm{DIR} = \Pr(\hat{Y}=1|A=a)/\Pr(\hat{Y}=1|A=b)\). Target $[0.8,1.25]$.
+  \item \(\Delta \mathrm{TPR}, \Delta \mathrm{FPR} \le 0.03\) where feasible; justify domain-specific deviations.
+  \item \(\mathrm{ECE} = \sum_k \frac{|B_k|}{n} \left| \mathrm{acc}(B_k) - \mathrm{conf}(B_k)\right|\). Target $<0.02$.
+\end{itemize}
+\end{frame}
+
+\end{document}

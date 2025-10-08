@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RuleScope: The Applied AI Law Challenge — by Adnan Masood</title>
+<meta name="description" content="Interactive quiz to practice mapping AI use cases to applicable regulations and controls." />
+<style>
+  :root{
+    --bg: #0f1220;
+    --panel: #14182b;
+    --panel-2:#0e1324;
+    --text: #e9ecf1;
+    --muted:#aab3c7;
+    --accent:#6dd5fa;
+    --accent-2:#7F53AC;
+    --good:#46d36d;
+    --bad:#ff6b6b;
+    --warn:#ffb155;
+    --chip:#202744;
+    --chip-on:#273259;
+    --border:#2a3253;
+    --focus:#ffd166;
+    --card:#11162a;
+  }
+  *{ box-sizing: border-box }
+  html, body { height:100% }
+  body{
+    margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,Helvetica,Arial,sans-serif;
+    color:var(--text); background: radial-gradient(1200px 600px at 5% -10%, #1a2141 0%, #0c1022 55%, #070a17 100%);
+  }
+  header{
+    position:sticky; top:0; z-index:5;
+    background: linear-gradient(90deg, rgba(127,83,172,.95), rgba(109,213,250,.95));
+    color:#0b0d18; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.2);
+    display:flex; align-items:center; gap:14px;
+    backdrop-filter:saturate(140%) blur(6px);
+  }
+  header h1{ font-size:1.05rem; margin:0; font-weight:700; letter-spacing:.2px }
+  header .sub{ opacity:.8; font-size:.9rem }
+  .container{
+    display:grid; grid-template-columns: 280px 1fr; gap:0; min-height:calc(100vh - 60px);
+  }
+  nav{
+    border-right:1px solid var(--border); background:linear-gradient(180deg, rgba(20,24,43,.7), rgba(14,19,36,.7));
+    padding:16px; position:sticky; top:60px; height:calc(100vh - 60px); overflow:auto;
+  }
+  nav .brand{ display:flex; align-items:center; gap:10px; margin-bottom:8px }
+  .brand svg{ width:22px; height:22px }
+  .stepper{ list-style:none; padding:0; margin:12px 0 18px }
+  .stepper li{
+    display:flex; align-items:center; gap:10px; padding:10px 8px; border-radius:10px; cursor:pointer;
+    color:var(--text); border:1px solid transparent;
+  }
+  .stepper li[aria-current="step"]{ background:var(--chip-on); border-color:var(--border) }
+  .stepper li:hover{ background:var(--chip) }
+  .stepper .idx{ width:24px; height:24px; border-radius:6px; background:#1f2850; display:inline-grid; place-items:center; font-weight:700; font-size:.85rem }
+  .stepper .label{ font-weight:600; font-size:.95rem }
+  .sidebox{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:12px; margin-top:8px;
+  }
+  .sidebox h4{ margin:6px 0 8px; font-size:.95rem }
+  .chiprow{ display:flex; flex-wrap:wrap; gap:8px }
+  .chip{
+    background:var(--chip); border:1px solid var(--border); color:var(--text);
+    padding:6px 10px; border-radius:999px; font-size:.85rem; cursor:pointer; user-select:none;
+  }
+  .chip[aria-pressed="true"]{ background:var(--chip-on); outline:1px solid #3c4674 }
+  main{ padding:22px; }
+  .section{ display:none; }
+  .section.active{ display:block; animation:fade .25s ease }
+  @keyframes fade{ from{opacity:.7; transform:translateY(2px)} to{opacity:1; transform:none}}
+  .cards{ display:grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap:14px }
+  .card{
+    background:linear-gradient(180deg, #11162a, #0f1427); border:1px solid var(--border); border-radius:14px; padding:14px;
+    display:flex; flex-direction:column; gap:10px; min-height:120px;
+  }
+  .card h3{ margin:.3rem 0; font-size:1.05rem }
+  .card .muted{ color:var(--muted); font-size:.9rem }
+  .card button{ margin-top:auto }
+  button{
+    appearance:none; border:none; background:linear-gradient(90deg, #7F53AC, #6DD5FA);
+    color:#0b0d18; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer;
+  }
+  button.ghost{
+    background:transparent; color:var(--text); border:1px solid var(--border);
+  }
+  button.flat{
+    background:#1b2242; color:var(--text); border:1px solid var(--border);
+  }
+  .toolbar{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:8px 0 14px }
+  .toolbar input[type="search"]{
+    background:var(--panel-2); color:var(--text); border:1px solid var(--border); padding:10px 12px; border-radius:10px; width:100%; max-width:440px;
+  }
+  .grid-2{ display:grid; grid-template-columns:1.1fr .9fr; gap:16px }
+  .panel{
+    background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:14px;
+  }
+  .panel h2{ margin:.2rem 0 8px; font-size:1.1rem }
+  .panel h3{ margin:.4rem 0 8px; font-size:1rem }
+  .panel .help{ color:var(--muted); font-size:.92rem }
+  .row, .col{ display:flex; gap:10px; flex-wrap:wrap }
+  .kv{ display:grid; grid-template-columns: 180px 1fr; gap:6px 10px; align-items:center }
+  label{ font-weight:600 }
+  select, input[type="text"], input[type="number"], .pillbox{
+    background:var(--panel-2); color:var(--text); border:1px solid var(--border); padding:10px 12px; border-radius:10px; width:100%;
+  }
+  .pillbox .pill{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; background:var(--chip); border:1px solid var(--border); margin:4px; cursor:pointer }
+  .pill[aria-selected="true"]{ background:var(--chip-on) }
+  .tiny{ font-size:.85rem; color:var(--muted)}
+  .reglist{ display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:12px; margin-top:10px }
+  .reg{
+    background:linear-gradient(180deg, #10162a, #0c1224); border:1px solid var(--border); border-radius:12px; padding:12px; display:flex; gap:10px;
+  }
+  .reg input{ margin-top:2px }
+  .reg .meta{ flex:1 }
+  .reg .meta .title{ font-weight:700; font-size:.98rem }
+  .reg .meta .desc{ color:var(--muted); font-size:.9rem; margin-top:4px }
+  .badge{ display:inline-flex; align-items:center; gap:6px; font-size:.8rem; padding:4px 8px; background:#1e2748; border:1px solid var(--border); border-radius:999px }
+  .badge.good{ background:rgba(70,211,109,.15); border-color:rgba(70,211,109,.4); color:#8df3ab }
+  .badge.bad{ background:rgba(255,107,107,.1); border-color:rgba(255,107,107,.3); color:#ff9b9b }
+  .badge.warn{ background:rgba(255,177,85,.12); border-color:rgba(255,177,85,.34); color:#ffd19c }
+  .hintbox{ background:#0d142a; border:1px dashed #445089; padding:12px; border-radius:12px; margin-top:10px }
+  .results{ display:grid; grid-template-columns: .9fr 1.1fr; gap:16px; align-items:start }
+  .callout{ padding:12px; border-radius:10px; border:1px solid var(--border); background:#101734 }
+  .callout.good{ border-color:rgba(70,211,109,.4); background:rgba(70,211,109,.07) }
+  .callout.bad{ border-color:rgba(255,107,107,.35); background:rgba(255,107,107,.06) }
+  .callout.warn{ border-color:rgba(255,177,85,.35); background:rgba(255,177,85,.06) }
+  .list{ margin:0; padding-left:18px }
+  .footerbar{ display:flex; justify-content:space-between; gap:10px; margin-top:14px }
+  .sr-only{ position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden }
+  @media (max-width: 980px){
+    .container{ grid-template-columns: 1fr }
+    nav{ position:static; height:auto }
+    .grid-2, .results{ grid-template-columns: 1fr }
+  }
+  /* focus states */
+  a, button, input, select, .chip, .pill{ outline:none }
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, .chip:focus-visible, .pill:focus-visible{
+    box-shadow: 0 0 0 3px var(--focus); outline:none
+  }
+</style>
+</head>
+<body>
+<header>
+  <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2c5.52 0 10 4.48 10 10 0 3.74-2.06 7-5.1 8.66-.36.2-.81.08-1.02-.28-.2-.36-.08-.82.28-1.02 2.65-1.46 4.34-4.26 4.34-7.36 0-4.69-3.81-8.5-8.5-8.5S3.5 7.31 3.5 12c0 3.1 1.69 5.9 4.34 7.36.36.2.48.66.28 1.02-.21.36-.66.48-1.02.28C4.06 19 2 15.74 2 12 2 6.48 6.48 2 12 2zm0 4.5c.41 0 .75.34.75.75v4.5h3.5a.75.75 0 0 1 0 1.5H12a.75.75 0 0 1-.75-.75V7.25c0-.41.34-.75.75-.75z"/></svg>
+  <div>
+    <h1>RuleScope: The Applied AI Law Challenge</h1>
+    <div class="sub">Start with an industry → pick a use case → select regulations → get hints → see controls you must implement</div>
+  </div>
+</header>
+
+<div class="container" role="application">
+  <nav aria-label="Steps">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 1 16 0v5a3 3 0 0 1-3 3h-2.5a1.5 1.5 0 0 1-1.4-1l-.7-2a2 2 0 0 0-1.9-1.4H9A3 3 0 0 1 6 12V8" stroke="currentColor" stroke-width="1.5"/></svg>
+      <strong>RuleScope</strong>
+    </div>
+    <ol class="stepper">
+      <li data-step="1" aria-current="step"><span class="idx">1</span><span class="label">Industry</span></li>
+      <li data-step="2"><span class="idx">2</span><span class="label">Use case</span></li>
+      <li data-step="3"><span class="idx">3</span><span class="label">Context</span></li>
+      <li data-step="4"><span class="idx">4</span><span class="label">Pick regulations</span></li>
+      <li data-step="5"><span class="idx">5</span><span class="label">Results & controls</span></li>
+    </ol>
+
+    <div class="sidebox">
+      <h4>Quick start</h4>
+      <p class="tiny">Loads the example: US company building a health <em>chatbot</em> for UK clients.</p>
+      <div class="chiprow">
+        <button class="chip" id="quickStartBtn" type="button" aria-pressed="false">UK Health Chatbot (US)</button>
+      </div>
+    </div>
+
+    <div class="sidebox" style="margin-top:12px">
+      <h4>Shortcuts</h4>
+      <div class="chiprow">
+        <button class="chip" type="button" data-jump="3">Go to Context</button>
+        <button class="chip" type="button" data-jump="4">Go to Regulations</button>
+        <button class="chip" type="button" data-jump="5">View Results</button>
+      </div>
+    </div>
+
+    <div class="sidebox" style="margin-top:12px">
+      <h4>Tips</h4>
+      <ul class="tiny" style="margin:0; padding-left:16px">
+        <li>Extraterritorial privacy (EU/UK) follows the <em>data subject</em>, not just your HQ.</li>
+        <li>HIPAA applies only to covered entities/business associates handling PHI.</li>
+        <li>EU AI Act = risk tiered; HR/credit/education/biometrics/essential services are typically high‑risk.</li>
+        <li>US = sectoral: FTC, EEOC, CFPB, FDA, plus state privacy & local audit laws (e.g., NYC y/n).</li>
+        <li>Generative & recommender systems trigger special platform/content rules in many regions.</li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <!-- STEP 1: INDUSTRY -->
+    <section class="section active" id="step1" aria-labelledby="h-step1">
+      <h2 id="h-step1">1) Choose an industry</h2>
+      <div class="cards" id="industryCards" role="list"></div>
+    </section>
+
+    <!-- STEP 2: USE CASE -->
+    <section class="section" id="step2" aria-labelledby="h-step2">
+      <h2 id="h-step2">2) Choose a use case</h2>
+      <p class="help">Pick the scenario closest to what you’re building. You can tailor details in the next step.</p>
+      <div class="cards" id="useCaseCards" role="list"></div>
+      <div class="footerbar">
+        <button class="ghost" data-prev="1">&larr; Back</button>
+        <button data-next="3">Continue</button>
+      </div>
+    </section>
+
+    <!-- STEP 3: CONTEXT -->
+    <section class="section" id="step3" aria-labelledby="h-step3">
+      <h2 id="h-step3">3) Context & scope</h2>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>Where are you and your users?</h3>
+          <div class="kv" style="margin-top:6px">
+            <label for="orgRegions">Organization locations</label>
+            <div class="pillbox" id="orgRegions" role="listbox" aria-multiselectable="true"></div>
+
+            <label for="userRegions">Users/clients locations</label>
+            <div class="pillbox" id="userRegions" role="listbox" aria-multiselectable="true"></div>
+          </div>
+
+          <h3 style="margin-top:14px">Data & decisions</h3>
+          <div class="row" id="dataTags"></div>
+          <div class="row" style="margin-top:6px" id="contextToggles"></div>
+
+          <h3 style="margin-top:14px">Optional local specifics (US)</h3>
+          <div class="row" id="usLocal">
+            <!-- dynamic toggles: NYC hiring? Colorado operations? California consumers? -->
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Scenario summary</h3>
+          <div id="scenarioSummary" class="callout" aria-live="polite"></div>
+          <div class="toolbar">
+            <button class="flat" id="saveScenarioBtn">Save scenario</button>
+            <button class="ghost" id="resetScenarioBtn">Reset</button>
+          </div>
+
+          <h3>Need a refresher?</h3>
+          <p class="help">Think about: cross‑border data, sector rules (health/finance/employment), automated decisions with legal effects, minors’ data, biometric/face.</p>
+        </div>
+      </div>
+      <div class="footerbar">
+        <button class="ghost" data-prev="2">&larr; Back</button>
+        <button data-next="4">Continue</button>
+      </div>
+    </section>
+
+    <!-- STEP 4: PICK REGS -->
+    <section class="section" id="step4" aria-labelledby="h-step4">
+      <h2 id="h-step4">4) Select the regulations that apply</h2>
+      <div class="toolbar">
+        <input type="search" id="searchReg" placeholder="Search regulations (e.g., GDPR, HIPAA, EU AI Act, COPPA, ECOA, DSA)..." aria-label="Search regulations" />
+        <button class="flat" id="hintBtn">Get hint</button>
+        <button class="ghost" id="clearSelectionBtn">Clear selection</button>
+      </div>
+      <div id="hintArea" class="hintbox" hidden aria-live="polite"></div>
+      <div class="reglist" id="regList" role="list"></div>
+
+      <div class="footerbar">
+        <button class="ghost" data-prev="3">&larr; Back</button>
+        <button id="gradeBtn">Check my answer</button>
+      </div>
+    </section>
+
+    <!-- STEP 5: RESULTS -->
+    <section class="section" id="step5" aria-labelledby="h-step5">
+      <h2 id="h-step5">5) Results & controls</h2>
+      <div id="scoreSummary" class="callout" aria-live="polite"></div>
+
+      <div class="results" style="margin-top:12px">
+        <div class="panel">
+          <h3>Your answer vs. correct</h3>
+          <div id="answerCompare"></div>
+          <div class="toolbar">
+            <button class="flat" id="exportBtn">Download results (JSON)</button>
+            <button class="ghost" onclick="window.print()">Print</button>
+            <button class="ghost" data-prev="4">Back to selection</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Why these regulations apply</h3>
+          <div id="whyList"></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <h3>Controls you should implement</h3>
+        <p class="help">Tailored from your scenario and the applicable regimes. Use these as an actionable checklist.</p>
+        <div id="controlsList"></div>
+      </div>
+
+      <div class="panel" style="margin-top:14px">
+        <h3>Helpful frameworks (not laws)</h3>
+        <ul class="list">
+          <li><strong>NIST AI Risk Management Framework 1.0</strong> — Govern/Map/Measure/Manage; excellent skeleton for AI risk program.</li>
+          <li><strong>ISO/IEC 42001</strong> (AI Management Systems) & <strong>ISO/IEC 23894</strong> (AI Risk Management) — align your process; often recognized by regulators/procurement.</li>
+          <li><strong>Model Cards, Data Sheets, Incident Playbooks</strong> — artifacts that make audits & regulator queries much easier.</li>
+        </ul>
+      </div>
+
+      <div class="footerbar">
+        <span class="tiny">This educational tool cannot substitute for legal counsel; verify specifics (e.g., entity status, thresholds, sector approvals).</span>
+        <button class="ghost" data-prev="4">Refine answers</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+/* =========================
+   Data Model & Knowledge
+   ========================= */
+
+const INDUSTRIES = [
+  { id:"healthcare", name:"Healthcare", icon:"🩺", uses:[
+    { id:"health_chatbot", name:"Patient support chatbot", tags:["chatbot","health","b2c"], defaults:{ data:["personal","health"], toggles:["coveredEntity"], recommender:false, generative:false, automated:false, medDevice:false, biometric:false, agentic:false } },
+    { id:"diagnostic_support", name:"Diagnostic decision support", tags:["health","decision","highrisk"], defaults:{ data:["personal","health"], toggles:["medDevice","coveredEntity","automated"], medDevice:true, automated:true, agentic:false } },
+    { id:"medical_imaging", name:"Medical imaging AI", tags:["health","device","highrisk"], defaults:{ data:["personal","health"], toggles:["medDevice","coveredEntity"], medDevice:true, automated:false } },
+    { id:"triage_risk", name:"Hospital triage risk scoring", tags:["health","risk","highrisk"], defaults:{ data:["personal","health"], toggles:["coveredEntity","automated"], automated:true } }
+  ]},
+  { id:"finance", name:"Finance", icon:"🏦", uses:[
+    { id:"credit_scoring", name:"Credit scoring / underwriting", tags:["finance","credit","highrisk"], defaults:{ data:["personal","financial"], toggles:["automated"], automated:true } },
+    { id:"fraud_detection", name:"Fraud detection", tags:["finance","security"], defaults:{ data:["personal","financial"], toggles:[], automated:false } },
+    { id:"robo_advice", name:"Robo‑adviser for retail investors", tags:["finance","advice"], defaults:{ data:["personal","financial"], toggles:["automated"], automated:false } }
+  ]},
+  { id:"employment", name:"Employment / HR", icon:"💼", uses:[
+    { id:"resume_screen", name:"Resume screening", tags:["employment","highrisk"], defaults:{ data:["personal","employment"], toggles:["automated","nyc"], automated:true } },
+    { id:"video_interview_ai", name:"Video interview analysis", tags:["employment","biometric","highrisk"], defaults:{ data:["personal","employment","biometric"], toggles:["automated","nyc"], automated:true } }
+  ]},
+  { id:"platforms", name:"Online platforms & content", icon:"🌐", uses:[
+    { id:"recommender_feed", name:"Personalized recommendations", tags:["recommender","platform"], defaults:{ data:["personal"], toggles:["recommender"], recommender:true } },
+    { id:"gen_text_image", name:"Public generative AI (text/image)", tags:["generative","platform"], defaults:{ data:[], toggles:["generative"], generative:true } },
+    { id:"deepfake_tool", name:"Deepfake / voice clone tool", tags:["generative","deepfake"], defaults:{ data:["biometric"], toggles:["generative"], generative:true } }
+  ]},
+  { id:"transport", name:"Transportation / AV", icon:"🚘", uses:[
+    { id:"adas", name:"Driver assist / ADAS", tags:["safety","device","highrisk"], defaults:{ data:[], toggles:["automated"], automated:true } },
+  ]},
+  { id:"education", name:"Education", icon:"🎓", uses:[
+    { id:"adaptive_learning", name:"Adaptive learning platform", tags:["education","profile"], defaults:{ data:["personal"], toggles:["automated"], automated:false } },
+    { id:"ai_proctoring", name:"AI exam proctoring", tags:["education","biometric","highrisk"], defaults:{ data:["personal","biometric"], toggles:["automated"], automated:true } }
+  ]},
+  { id:"retail", name:"E‑commerce / Retail", icon:"🛍️", uses:[
+    { id:"chatbot_retail", name:"Shopping assistant chatbot", tags:["chatbot","b2c"], defaults:{ data:["personal"], toggles:[], automated:false } },
+    { id:"dynamic_pricing", name:"Personalized pricing", tags:["b2c","pricing"], defaults:{ data:["personal"], toggles:["automated"], automated:true } }
+  ]},
+  { id:"public", name:"Public sector", icon:"🏛️", uses:[
+    { id:"benefits_risk", name:"Benefits fraud risk scoring", tags:["public","highrisk"], defaults:{ data:["personal"], toggles:["automated"], automated:true } }
+  ]}
+];
+
+// Region choices
+const REGIONS = [
+  { id:"US",  label:"United States" },
+  { id:"EU",  label:"EU/EEA" },
+  { id:"UK",  label:"United Kingdom" },
+  { id:"CA",  label:"Canada" },
+  { id:"BR",  label:"Brazil" },
+  { id:"CN",  label:"China" },
+  { id:"KR",  label:"South Korea" },
+  { id:"AU",  label:"Australia" },
+  { id:"GL",  label:"Global/Other" }
+];
+
+// Data tags
+const DATA_TAGS = [
+  { id:"personal",  label:"Personal data" },
+  { id:"health",    label:"Health / PHI" },
+  { id:"financial", label:"Financial data" },
+  { id:"employment",label:"Employment data" },
+  { id:"biometric", label:"Biometric / face / voice" },
+  { id:"children",  label:"Children < 13" },
+  { id:"location",  label:"Precise location" }
+];
+
+// Context toggles (capabilities)
+const CONTEXT_TOGGLES = [
+  { id:"automated",     label:"Automated decisions w/ legal or similar effects" },
+  { id:"recommender",   label:"Recommender system (personalized feeds)" },
+  { id:"generative",    label:"Public generative AI (text/image/audio/video)" },
+  { id:"biometric",     label:"Biometric identification / categorization" },
+  { id:"medDevice",     label:"Part of a regulated product (e.g., medical device)" },
+  { id:"coveredEntity", label:"HIPAA covered entity / business associate (US)" },
+  { id:"agentic",       label:"Agent can take actions (write emails/tickets/PRs)" }
+];
+
+// US local toggles (optional refiners)
+const US_LOCAL = [
+  { id:"NYC",  label:"NYC hiring (LL 144 bias audit)"},
+  { id:"CA",   label:"California consumers (CPRA)"},
+  { id:"CO",   label:"Colorado operations (AI Act SB24‑205)"},
+];
+
+// Regulations catalog
+const REGULATIONS = [
+  // Privacy / data protection
+  { id:"gdpr_eu", title:"EU GDPR (Data Protection)", region:"EU", desc:"Applies to processing personal data of people in the EU/EEA; includes Art. 22 limits on solely automated decisions.", applies: s => hasEUData(s), why: s => `You process personal data of EU/EEA data subjects (${list(s.userRegions,"EU")}); GDPR applies extraterritorially.` },
+  { id:"uk_gdpr", title:"UK GDPR / DPA 2018", region:"UK", desc:"UK’s GDPR-equivalent for data subjects in the UK; similar rights & DPIA expectations.", applies: s => s.userRegions.has("UK"), why: s => `You have UK users/clients; UK GDPR applies to personal data processed about them.` },
+  { id:"pipeda_ca", title:"Canada (PIPEDA/CPPA)", region:"CA", desc:"Canadian private‑sector privacy regime; adds automated decision transparency in newer updates.", applies: s => s.userRegions.has("CA"), why: s => `You serve Canadian data subjects; federal privacy rules apply.` },
+  { id:"lgpd_br", title:"Brazil LGPD", region:"BR", desc:"Brazil’s GDPR‑like privacy law; rights on automated decisions & profiling.", applies: s => s.userRegions.has("BR"), why: s => `Brazilian data subjects trigger LGPD.` },
+
+  // Sectoral US + general consumer protection
+  { id:"hipaa", title:"US HIPAA (Health Privacy)", region:"US", desc:"Protects PHI handled by covered entities/business associates.", applies: s => s.orgRegions.has("US") && s.data.has("health") && s.toggles.has("coveredEntity"), why: s => `Health data + you indicated covered entity/business associate; HIPAA safeguards/BAAs apply.` },
+  { id:"ftc_sec5", title:"US FTC Act §5 (Unfair/Deceptive)", region:"US", desc:"Covers deceptive claims and unfair practices (security, bias claims, dark patterns).", applies: s => s.orgRegions.has("US"), why: s => `US consumer protection generally applies to your product and representations.` },
+  { id:"coppa", title:"US COPPA (Children’s Privacy)", region:"US", desc:"If you collect personal data from children under 13; requires verifiable parental consent.", applies: s => s.orgRegions.has("US") && s.data.has("children"), why: s => `You indicated data from children under 13; COPPA obligations apply.` },
+  { id:"us_state_priv", title:"US State Privacy Laws (CPRA/CPA/CTDPA…)", region:"US", desc:"State consumer privacy laws with opt‑outs & data protection assessments for high‑risk profiling.", applies: s => s.orgRegions.has("US") && s.data.has("personal") && (s.usLocal.has("CA") || s.usLocal.has("CO")), why: s => `You selected ${s.usLocal.has("CA")?"California":""}${(s.usLocal.has("CA")&&s.usLocal.has("CO"))?" and ":""}${s.usLocal.has("CO")?"Colorado":""}; state privacy rules and assessments likely apply.` },
+
+  // US sectoral (employment / credit)
+  { id:"eeoc_titlevii_ada", title:"US Employment discrimination law (Title VII/ADA)", region:"US", desc:"Covers disparate impact & accommodations for hiring/promotion decisions aided by AI.", applies: s => s.orgRegions.has("US") && s.tags.has("employment"), why: s => `Employment use case in the US; anti‑discrimination & accommodation duties apply.` },
+  { id:"nyc_ll144", title:"NYC Local Law 144 (bias audit)", region:"US", desc:"Independent bias audit + notices when using AEDTs for hiring/promotions in NYC.", applies: s => s.orgRegions.has("US") && s.tags.has("employment") && s.usLocal.has("NYC"), why: s => `You toggled NYC hiring; LL144 requires annual bias audit & notices.` },
+  { id:"ecoa_fcra", title:"US ECOA + FCRA (credit decisions)", region:"US", desc:"Fair lending + adverse action notice; explain reasons even for ML models.", applies: s => s.orgRegions.has("US") && s.tags.has("credit"), why: s => `Credit/underwriting use case in the US; ECOA/FCRA require reasons for decisions & fair lending controls.` },
+  { id:"glba", title:"US GLBA (financial institutions)", region:"US", desc:"Financial privacy/security program obligations if you’re a GLBA‑covered financial institution.", applies: s => s.orgRegions.has("US") && s.tags.has("finance"), why: s => `Finance use case; GLBA program and safeguards may be triggered depending on entity status.` },
+
+  // EU platform/content / AI Act
+  { id:"dsa_eu", title:"EU Digital Services Act (platform accountability)", region:"EU", desc:"Transparency for recommenders; platform risk mitigations (especially for large services).", applies: s => hasEUData(s) && (s.toggles.has("recommender") || s.tags.has("platform")), why: s => `EU users with a platform/recommender; DSA transparency & risk duties likely apply.` },
+  { id:"eu_ai_act", title:"EU AI Act (risk‑tiered)", region:"EU", desc:"High‑risk categories (HR/credit/education/biometrics/essential services); transparency for chatbots/deepfakes; GPAI duties.", applies: s => hasEUData(s) && triggersEUAIAct(s), why: s => `EU users and your scenario hits ${euRiskLabel(s)}; AI Act obligations (risk management, data governance, human oversight, docs) will apply.` },
+
+  // China
+  { id:"cn_algos", title:"China Algorithmic Recommendation Provisions", region:"CN", desc:"Filing & user controls for recommenders; transparency of principles.", applies: s => s.userRegions.has("CN") && (s.toggles.has("recommender") || s.tags.has("platform")), why: s => `Chinese users + recommender; filing & controls under CAC rules.` },
+  { id:"cn_deepsynth", title:"China Deep Synthesis / Generative AI Measures", region:"CN", desc:"Label AI‑generated content; security assessment; real‑name in some contexts.", applies: s => s.userRegions.has("CN") && s.toggles.has("generative"), why: s => `Chinese users + generative/deepfake tool; labeling & security reviews required.` },
+
+  // Canada AI
+  { id:"ca_aida", title:"Canada AIDA (high‑impact AI)", region:"CA", desc:"Risk assessments/mitigations/incident reporting for high‑impact AI (pending rollout).", applies: s => s.userRegions.has("CA") && isHighImpactLike(s), why: s => `Canadian users + high‑impact characteristics (e.g., employment/credit/health); AIDA duties expected.` },
+
+  // Safety/medical
+  { id:"fda_samd", title:"US FDA — AI/ML Software as a Medical Device", region:"US", desc:"Premarket review & change‑control plan for learning devices.", applies: s => s.orgRegions.has("US") && s.toggles.has("medDevice"), why: s => `You indicated a regulated medical device; FDA device pathway & quality system apply.` },
+];
+
+// Helper for EU presence
+function hasEUData(s){ return s.userRegions.has("EU"); }
+
+// Heuristic: does EU AI Act apply (high‑risk or transparency triggers)
+function triggersEUAIAct(s){
+  const highRiskTags = ["employment","credit","education","biometric","public","highrisk"];
+  const hasHigh = Array.from(s.tags).some(t => highRiskTags.includes(t)) || s.toggles.has("biometric") || s.toggles.has("medDevice") || (s.toggles.has("automated") && (s.tags.has("credit") || s.tags.has("employment") || s.tags.has("education")));
+  const limitedRisk = s.tags.has("chatbot") || s.toggles.has("generative");
+  return hasHigh || limitedRisk;
+}
+function euRiskLabel(s){
+  if (Array.from(s.tags).some(t=>["employment","credit","education","biometric","public","highrisk"].includes(t)) || s.toggles.has("biometric") || s.toggles.has("medDevice")) return "a high‑risk category";
+  if (s.tags.has("chatbot") || s.toggles.has("generative")) return "a transparency category (chatbots/deepfakes)";
+  return "applicable scope";
+}
+
+// Heuristic for Canada “high‑impact‑like”
+function isHighImpactLike(s){
+  return s.tags.has("employment") || s.tags.has("credit") || s.data.has("health") || s.toggles.has("biometric") || s.toggles.has("automated");
+}
+
+/* =========================
+   App State
+   ========================= */
+const state = {
+  industry: null,
+  useCase: null,
+  tags: new Set(),
+  data: new Set(),
+  orgRegions: new Set(),
+  userRegions: new Set(),
+  toggles: new Set(),
+  usLocal: new Set(),
+  selectedRegs: new Set(),
+  lastHints: []
+};
+
+/* =========================
+   UI Rendering
+   ========================= */
+
+const el = sel => document.querySelector(sel);
+const els = sel => Array.from(document.querySelectorAll(sel));
+
+function setStep(n){
+  els(".section").forEach(s => s.classList.remove("active"));
+  el("#step"+n).classList.add("active");
+  els(".stepper li").forEach(li => li.setAttribute("aria-current", li.dataset.step==n?"step":"false"));
+  // keep summary fresh
+  if (n===3) renderScenarioSummary();
+}
+
+function renderIndustries(){
+  const wrap = el("#industryCards"); wrap.innerHTML = "";
+  INDUSTRIES.forEach(ind=>{
+    const div = document.createElement("article");
+    div.className="card"; div.setAttribute("role","listitem");
+    div.innerHTML = `
+      <div class="badge">${ind.icon || "📦"}</div>
+      <h3>${ind.name}</h3>
+      <p class="muted">Explore ${ind.uses.length} curated use cases.</p>
+      <div class="row">
+        <button type="button" aria-label="Choose ${ind.name}">Choose</button>
+      </div>
+    `;
+    div.querySelector("button").addEventListener("click", ()=>{
+      state.industry = ind.id; state.useCase = null;
+      state.tags.clear(); state.data.clear();
+      setStep(2); renderUseCases();
+    });
+    wrap.appendChild(div);
+  });
+}
+
+function renderUseCases(){
+  const wrap = el("#useCaseCards"); wrap.innerHTML = "";
+  const ind = INDUSTRIES.find(i=>i.id===state.industry);
+  ind.uses.forEach(u=>{
+    const div = document.createElement("article");
+    div.className="card"; div.setAttribute("role","listitem");
+    div.innerHTML = `
+      <h3>${u.name}</h3>
+      <p class="muted">Tags: ${u.tags.join(", ")}</p>
+      <div class="row"><button type="button">Select</button></div>
+    `;
+    div.querySelector("button").addEventListener("click", ()=>{
+      state.useCase = u.id;
+      // load defaults
+      state.tags = new Set(u.tags);
+      state.data = new Set(u.defaults?.data || []);
+      state.toggles = new Set(u.defaults?.toggles || []);
+      // org/users default empty; let Quick Start prefill if used
+      setStep(3); renderContext();
+    });
+    wrap.appendChild(div);
+  });
+}
+
+function pillbox(id, items, selectedSet){
+  const host = el("#"+id);
+  host.innerHTML = "";
+  items.forEach(item=>{
+    const pill = document.createElement("span");
+    pill.className="pill"; pill.setAttribute("role","option");
+    pill.setAttribute("aria-selected", selectedSet.has(item.id)?"true":"false");
+    pill.textContent = item.label || item.name;
+    pill.tabIndex=0;
+    pill.addEventListener("click", ()=>{
+      if (selectedSet.has(item.id)) selectedSet.delete(item.id); else selectedSet.add(item.id);
+      pill.setAttribute("aria-selected", selectedSet.has(item.id)?"true":"false");
+      renderScenarioSummary();
+    });
+    pill.addEventListener("keydown", (e)=>{ if (e.key===" "||e.key==="Enter"){ e.preventDefault(); pill.click(); }});
+    host.appendChild(pill);
+  });
+}
+
+function renderContext(){
+  // Regions
+  pillbox("orgRegions", REGIONS, state.orgRegions);
+  pillbox("userRegions", REGIONS, state.userRegions);
+
+  // Data tags
+  const dataWrap = el("#dataTags"); dataWrap.innerHTML="";
+  DATA_TAGS.forEach(d=>{
+    const b = document.createElement("button");
+    b.className="chip"; b.type="button"; b.setAttribute("aria-pressed", state.data.has(d.id)?"true":"false");
+    b.textContent = d.label;
+    b.addEventListener("click", ()=>{
+      if (state.data.has(d.id)) state.data.delete(d.id); else state.data.add(d.id);
+      b.setAttribute("aria-pressed", state.data.has(d.id)?"true":"false");
+      renderScenarioSummary();
+    });
+    b.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); b.click(); }});
+    dataWrap.appendChild(b);
+  });
+
+  // Toggles
+  const tWrap = el("#contextToggles"); tWrap.innerHTML="";
+  CONTEXT_TOGGLES.forEach(t=>{
+    const b = document.createElement("button");
+    b.className="chip"; b.type="button"; b.setAttribute("aria-pressed", state.toggles.has(t.id)?"true":"false");
+    b.textContent = t.label;
+    b.addEventListener("click", ()=>{
+      if (state.toggles.has(t.id)) state.toggles.delete(t.id); else state.toggles.add(t.id);
+      b.setAttribute("aria-pressed", state.toggles.has(t.id)?"true":"false");
+      renderScenarioSummary();
+    });
+    tWrap.appendChild(b);
+  });
+
+  // US local
+  const uWrap = el("#usLocal"); uWrap.innerHTML="";
+  US_LOCAL.forEach(t=>{
+    const b = document.createElement("button");
+    b.className="chip"; b.type="button"; b.setAttribute("aria-pressed", state.usLocal.has(t.id)?"true":"false");
+    b.textContent = t.label;
+    b.addEventListener("click", ()=>{
+      if (state.usLocal.has(t.id)) state.usLocal.delete(t.id); else state.usLocal.add(t.id);
+      b.setAttribute("aria-pressed", state.usLocal.has(t.id)?"true":"false");
+      renderScenarioSummary();
+    });
+    uWrap.appendChild(b);
+  });
+
+  renderScenarioSummary();
+}
+
+function renderScenarioSummary(){
+  const box = el("#scenarioSummary");
+  const ind = INDUSTRIES.find(i=>i.id===state.industry)?.name || "—";
+  const uc  = INDUSTRIES.find(i=>i.id===state.industry)?.uses.find(u=>u.id===state.useCase)?.name || "—";
+  const tags= Array.from(state.tags).join(", ") || "—";
+  const data= Array.from(state.data).join(", ") || "—";
+  const org = Array.from(state.orgRegions).map(r=>REGIONS.find(x=>x.id===r)?.label||r).join(", ") || "—";
+  const usr = Array.from(state.userRegions).map(r=>REGIONS.find(x=>x.id===r)?.label||r).join(", ") || "—";
+  const tog = Array.from(state.toggles).join(", ") || "—";
+  const usl = Array.from(state.usLocal).join(", ") || "—";
+  box.innerHTML = `
+    <div><strong>Industry:</strong> ${ind}</div>
+    <div><strong>Use case:</strong> ${uc}</div>
+    <div><strong>Org regions:</strong> ${org}</div>
+    <div><strong>Users/clients:</strong> ${usr}</div>
+    <div><strong>Data:</strong> ${data}</div>
+    <div><strong>Capabilities:</strong> ${tog}</div>
+    <div><strong>US local flags:</strong> ${usl}</div>
+  `;
+}
+
+// Regulations list + filter
+function renderRegList(){
+  const q = (el("#searchReg").value || "").toLowerCase();
+  const wrap = el("#regList"); wrap.innerHTML="";
+  REGULATIONS
+    .filter(r => r.title.toLowerCase().includes(q) || r.desc.toLowerCase().includes(q) || r.region.toLowerCase().includes(q) || r.id.toLowerCase().includes(q))
+    .forEach(r=>{
+      const item = document.createElement("div");
+      item.className="reg"; item.setAttribute("role","listitem");
+      const checked = state.selectedRegs.has(r.id) ? "checked" : "";
+      item.innerHTML = `
+        <div><input id="chk_${r.id}" type="checkbox" ${checked} /></div>
+        <div class="meta">
+          <div class="title">${r.title} <span class="badge">${r.region}</span></div>
+          <div class="desc">${r.desc}</div>
+        </div>
+      `;
+      item.querySelector("input").addEventListener("change", (e)=>{
+        if (e.target.checked) state.selectedRegs.add(r.id); else state.selectedRegs.delete(r.id);
+      });
+      wrap.appendChild(item);
+    });
+}
+
+function computeScenario(){
+  // Snapshot current state to pass to rule functions
+  return {
+    industry: state.industry, useCase: state.useCase,
+    tags: new Set(state.tags), data: new Set(state.data),
+    orgRegions: new Set(state.orgRegions), userRegions: new Set(state.userRegions),
+    toggles: new Set(state.toggles), usLocal: new Set(state.usLocal)
+  };
+}
+
+function computeCorrectRegs(){
+  const s = computeScenario();
+  const correct = REGULATIONS.filter(r => {
+    try { return r.applies(s); } catch(e){ return false; }
+  }).map(r=>r.id);
+  return new Set(correct);
+}
+
+function grade(){
+  const correct = computeCorrectRegs();
+  const chosen  = new Set(state.selectedRegs);
+  const tp = [...chosen].filter(x=>correct.has(x));
+  const fp = [...chosen].filter(x=>!correct.has(x));
+  const fn = [...correct].filter(x=>!chosen.has(x));
+  const prec = tp.length ? (tp.length/(tp.length+fp.length)) : 0;
+  const rec  = tp.length ? (tp.length/(tp.length+fn.length)) : 0;
+  const f1   = (prec+rec) ? (2*prec*rec/(prec+rec)) : 0;
+
+  return { correct, chosen, tp, fp, fn, prec, rec, f1 };
+}
+
+function renderResults(){
+  const { tp, fp, fn, f1 } = grade();
+  // Score summary
+  const score = Math.round(f1*100);
+  let tone="good"; if (score<70) tone="warn"; if (score<40) tone="bad";
+  el("#scoreSummary").className = `callout ${tone}`;
+  el("#scoreSummary").innerHTML = `<strong>Score:</strong> ${score}/100 — ` +
+    (score>=85 ? "Excellent mapping." : score>=60 ? "Good start — review missed items below." : "Keep going — use hints and revise selection.");
+
+  // Comparison
+  const block = el("#answerCompare"); block.innerHTML="";
+  const mkList = (title, arr, tone) => {
+    const wrap = document.createElement("div");
+    wrap.className = `callout ${tone}`; wrap.style.marginBottom="8px";
+    wrap.innerHTML = `<strong>${title} (${arr.length}):</strong>` + (arr.length ? `<ul class="list">${arr.map(x=>`<li>${labelForReg(x)}</li>`).join("")}</ul>` : ` <span class="tiny">None</span>`);
+    return wrap;
+  };
+  block.appendChild(mkList("Correct selections", tp, "good"));
+  block.appendChild(mkList("Missed (should select)", fn, "warn"));
+  block.appendChild(mkList("Not applicable (deselect)", fp, "bad"));
+
+  // Why list
+  const s = computeScenario();
+  const whyDiv = el("#whyList"); whyDiv.innerHTML="";
+  computeCorrectRegs().forEach(id=>{
+    const reg = REGULATIONS.find(r=>r.id===id);
+    const p = document.createElement("div");
+    p.className="callout";
+    p.innerHTML = `<strong>${reg.title}</strong> — ${reg.why(s)}`;
+    whyDiv.appendChild(p);
+  });
+
+  // Controls
+  renderControls();
+}
+
+function labelForReg(id){ return REGULATIONS.find(r=>r.id===id)?.title || id; }
+
+/* =========================
+   Hints
+   ========================= */
+function nextHint(){
+  const s = computeScenario();
+  const correct = computeCorrectRegs();
+  const chosen  = state.selectedRegs;
+  const missing = [...correct].filter(x=>!chosen.has(x));
+
+  // If nothing missing but extras exist, nudge on extras
+  if (!missing.length){
+    const extras = [...chosen].filter(x=>!correct.has(x));
+    if (extras.length){
+      const r = REGULATIONS.find(r=>r.id===extras[0]);
+      return `Re‑check <strong>${r.title}</strong> — it doesn’t appear triggered by your scenario. Try deselecting it.`;
+    } else {
+      return "Nice! Your selection matches the scenario. You can still review explanations and controls.";
+    }
+  }
+
+  // Targeted hints for common misses
+  const want = id => missing.includes(id);
+  if (want("uk_gdpr") && s.userRegions.has("UK")) return "Hint: Think extraterritorial privacy for people in the <strong>UK</strong>.";
+  if (want("gdpr_eu") && hasEUData(s)) return "Hint: A data protection regime follows <em>EU data subjects</em> across borders.";
+  if (want("hipaa") && s.data.has("health") && s.orgRegions.has("US")) return "Hint: US health privacy applies only if you are a <strong>covered entity/BA</strong> handling PHI.";
+  if (want("ecoa_fcra") && s.tags.has("credit")) return "Hint: US credit decisions require <strong>specific adverse action reasons</strong>.";
+  if (want("eeoc_titlevii_ada") && s.tags.has("employment")) return "Hint: US hiring involves <strong>anti‑discrimination</strong> and <strong>accommodations</strong>.";
+  if (want("nyc_ll144") && s.usLocal.has("NYC")) return "Hint: In <strong>NYC</strong>, automated hiring tools need a <strong>bias audit</strong>.";
+  if (want("eu_ai_act") && hasEUData(s)) return "Hint: EU has a <strong>risk‑based AI law</strong> — HR/credit/education/biometrics are typically high‑risk; chatbots/deepfakes need transparency.";
+  if (want("dsa_eu") && hasEUData(s) && (s.toggles.has("recommender")||s.tags.has("platform"))) return "Hint: EU platforms must explain <strong>recommenders</strong> and sometimes offer a non‑profiled feed.";
+  if (want("coppa") && s.data.has("children") && s.orgRegions.has("US")) return "Hint: Under‑13 users in the US trigger a special kids’ privacy law.";
+  if (want("fda_samd") && s.toggles.has("medDevice") && s.orgRegions.has("US")) return "Hint: Learning medical software in the US often follows a <strong>device pathway</strong>.";
+  if (want("cn_deepsynth") && s.userRegions.has("CN") && s.toggles.has("generative")) return "Hint: Some countries require <strong>labels</strong> on AI‑generated media.";
+  if (want("us_state_priv") && s.orgRegions.has("US")) return "Hint: Consider state privacy regimes (e.g., <strong>California</strong>, <strong>Colorado</strong>) when you serve those residents.";
+  if (want("ca_aida") && s.userRegions.has("CA")) return "Hint: Canada is rolling out <strong>high‑impact AI</strong> duties for areas like employment, credit, health.";
+
+  // Generic fallback hint
+  return "Focus on: (a) where your users are, (b) sector‑specific laws (health/finance/employment), and (c) whether decisions are automated.";
+}
+
+/* =========================
+   Controls mapping
+   ========================= */
+const CONTROLS = {
+  baseline: [
+    "Document the system: purpose, data sources, model versioning, eval metrics, limitations.",
+    "Establish an AI risk register and owners; schedule periodic reviews.",
+    "Implement monitoring & logging (inputs/outputs, key decisions, overrides) with retention."
+  ],
+  gdpr: [
+    "Identify lawful basis; publish clear privacy notices.",
+    "Perform a DPIA for high‑risk processing; mitigate risks.",
+    "Enable rights (access, deletion, objection, automated decision review).",
+    "Data minimization, purpose limitation, retention limits; secure cross‑border transfers (SCCs/TIA).",
+  ],
+  uk_gdpr: [
+    "UK DPIA & transparency; ensure UK transfer mechanisms (IDTA / Addendum)."
+  ],
+  hipaa: [
+    "Execute BAAs; admin/technical/physical safeguards; role‑based access.",
+    "Risk analysis; encryption in transit/at rest; audit logs; breach notification plan.",
+    "Minimum necessary; workforce training; policy/procedure documentation."
+  ],
+  ftc: [
+    "Substantiate claims; avoid dark patterns; reasonable security program; vendor oversight."
+  ],
+  eeoc: [
+    "Bias testing and validation; job‑relatedness/business necessity documentation.",
+    "Provide reasonable accommodations; offer human review/appeal."
+  ],
+  ecoa: [
+    "Adverse action notice with specific reasons; explainability tooling for credit decisions.",
+    "Model risk management (governance, testing, change control); fair lending monitoring."
+  ],
+  ai_act: [
+    "Risk management system (hazard analysis, mitigation).",
+    "Data & data governance (representative, relevant, documented).",
+    "Technical file; traceability; event logging.",
+    "Human oversight design; accuracy/robustness/cybersecurity targets.",
+    "Post‑market monitoring; serious incident reporting.",
+    "Transparency for chatbots/deepfakes; CE marking where required."
+  ],
+  dsa: [
+    "Explain recommender logic; offer a non‑profiled option (where applicable).",
+    "Annual risk assessments & mitigations for systemic risks (if large platform)."
+  ],
+  state_priv: [
+    "Publish opt‑out(s) for targeted advertising/sale/profiling; honor GPC signals.",
+    "Data protection assessments for high‑risk profiling.",
+  ],
+  coppa: [
+    "Verifiable parental consent; age gating; kid‑friendly notices; data minimization; deletion."
+  ],
+  glba: [
+    "GLBA privacy notice; information security program; vendor management; incident response."
+  ],
+  fda: [
+    "Determine classification; premarket submission; Predetermined Change Control Plan.",
+    "Quality Management System; clinical/analytical validation; labeling/instructions for use."
+  ],
+  canada: [
+    "For AIDA high‑impact: impact assessment, mitigation plan, monitoring & incident reporting."
+  ],
+  china_algos: [
+    "Algorithm filing/registration; user controls (disable personalization); disclose principles."
+  ],
+  china_deepsynth: [
+    "Label AI‑generated content; security assessment; abuse reporting channel."
+  ],
+  agentic: [
+    "Action allow‑list & policy engine; human approvals for sensitive actions.",
+    "Dry‑run/simulation mode; kill‑switch; secrets vault and scoped tokens.",
+    "Granular tool permissions; rate limits; full action audit trail with replay."
+  ]
+};
+
+function renderControls(){
+  const s = computeScenario();
+  const regs = computeCorrectRegs();
+  const list = [];
+
+  // baseline always
+  list.push(...CONTROLS.baseline);
+
+  if (regs.has("gdpr_eu")) list.push(...CONTROLS.gdpr);
+  if (regs.has("uk_gdpr")) list.push(...CONTROLS.uk_gdpr);
+  if (regs.has("hipaa")) list.push(...CONTROLS.hipaa);
+  if (regs.has("ftc_sec5")) list.push(...CONTROLS.ftc);
+  if (regs.has("eeoc_titlevii_ada")) list.push(...CONTROLS.eeoc);
+  if (regs.has("ecoa_fcra")) list.push(...CONTROLS.ecoa);
+  if (regs.has("eu_ai_act")) list.push(...CONTROLS.ai_act);
+  if (regs.has("dsa_eu")) list.push(...CONTROLS.dsa);
+  if (regs.has("us_state_priv")) list.push(...CONTROLS.state_priv);
+  if (regs.has("coppa")) list.push(...CONTROLS.coppa);
+  if (regs.has("glba")) list.push(...CONTROLS.glba);
+  if (regs.has("fda_samd")) list.push(...CONTROLS.fda);
+  if (regs.has("pipeda_ca") || regs.has("ca_aida")) list.push(...CONTROLS.canada);
+  if (regs.has("cn_algos")) list.push(...CONTROLS.china_algos);
+  if (regs.has("cn_deepsynth")) list.push(...CONTROLS.china_deepsynth);
+  if (s.toggles.has("agentic")) list.push(...CONTROLS.agentic);
+
+  const unique = Array.from(new Set(list));
+  el("#controlsList").innerHTML = `<ul class="list">${unique.map(x=>`<li>${x}</li>`).join("")}</ul>`;
+}
+
+/* =========================
+   Event Wiring
+   ========================= */
+
+function hookNav(){
+  els(".stepper li").forEach(li=>{
+    li.addEventListener("click", ()=> setStep(li.dataset.step));
+  });
+  els("[data-prev]").forEach(b=> b.addEventListener("click", ()=> setStep(b.dataset.prev)));
+  els("[data-next]").forEach(b=> b.addEventListener("click", ()=> {
+    if (b.dataset.next==="4"){ renderRegList(); }
+    setStep(b.dataset.next);
+  }));
+  els("[data-jump]").forEach(b=> b.addEventListener("click", ()=> {
+    const n = parseInt(b.dataset.jump,10);
+    if (n===4) renderRegList();
+    setStep(n);
+  }));
+}
+
+function hookSearch(){
+  el("#searchReg").addEventListener("input", renderRegList);
+  el("#clearSelectionBtn").addEventListener("click", ()=>{ state.selectedRegs.clear(); renderRegList(); });
+  el("#gradeBtn").addEventListener("click", ()=>{ setStep(5); renderResults(); });
+  el("#hintBtn").addEventListener("click", ()=>{
+    const h = nextHint();
+    const box = el("#hintArea");
+    box.hidden=false; box.innerHTML = h;
+  });
+  el("#exportBtn").addEventListener("click", downloadResults);
+  el("#saveScenarioBtn").addEventListener("click", saveScenario);
+  el("#resetScenarioBtn").addEventListener("click", resetScenario);
+  el("#quickStartBtn").addEventListener("click", quickStart);
+}
+
+function saveScenario(){
+  localStorage.setItem("rulescope_scenario", JSON.stringify({
+    industry: state.industry, useCase: state.useCase,
+    tags: Array.from(state.tags), data: Array.from(state.data),
+    org: Array.from(state.orgRegions), users: Array.from(state.userRegions),
+    toggles: Array.from(state.toggles), usLocal: Array.from(state.usLocal)
+  }));
+  notify("Scenario saved locally.");
+}
+function resetScenario(){
+  state.orgRegions.clear(); state.userRegions.clear();
+  state.toggles.clear(); state.usLocal.clear();
+  renderContext(); notify("Context reset.");
+}
+function quickStart(){
+  // Example: US org building a health chatbot for UK clients → UK GDPR + HIPAA
+  state.industry="healthcare";
+  state.useCase="health_chatbot";
+  const use = INDUSTRIES.find(i=>i.id==="healthcare").uses.find(u=>u.id==="health_chatbot");
+  state.tags = new Set(use.tags);
+  state.data = new Set(["personal","health"]);
+  state.orgRegions = new Set(["US"]);
+  state.userRegions = new Set(["UK"]);
+  state.toggles = new Set(["coveredEntity"]); // indicate HIPAA applicability
+  state.usLocal.clear();
+
+  setStep(3); renderContext();
+  notify("Quick start loaded. Proceed to Step 4 to select regulations.");
+}
+
+function downloadResults(){
+  const s = computeScenario();
+  const g = grade();
+  const exportObj = {
+    scenario: {
+      industry: state.industry, useCase: state.useCase,
+      tags: Array.from(s.tags), data: Array.from(s.data),
+      orgRegions: Array.from(s.orgRegions), userRegions: Array.from(s.userRegions),
+      toggles: Array.from(s.toggles), usLocal: Array.from(s.usLocal)
+    },
+    selection: Array.from(state.selectedRegs),
+    correct: Array.from(g.correct),
+    metrics: { precision:g.prec, recall:g.rec, f1:g.f1 },
+    timestamp: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(exportObj,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "rulescope_results.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function notify(msg){
+  const bar = document.createElement("div");
+  bar.className = "callout";
+  bar.style.position="fixed"; bar.style.right="14px"; bar.style.bottom="14px"; bar.style.zIndex=9999;
+  bar.textContent = msg;
+  document.body.appendChild(bar);
+  setTimeout(()=> bar.remove(), 2200);
+}
+
+/* =========================
+   Boot
+   ========================= */
+
+renderIndustries();
+hookNav();
+hookSearch();
+
+// Restore saved scenario if any
+const saved = localStorage.getItem("rulescope_scenario");
+if (saved){
+  try{
+    const s = JSON.parse(saved);
+    state.industry = s.industry;
+    state.useCase  = s.useCase;
+    state.tags     = new Set(s.tags||[]);
+    state.data     = new Set(s.data||[]);
+    state.orgRegions = new Set(s.org||[]);
+    state.userRegions= new Set(s.users||[]);
+    state.toggles  = new Set(s.toggles||[]);
+    state.usLocal  = new Set(s.usLocal||[]);
+    setStep(3); renderContext();
+    notify("Loaded saved scenario.");
+  }catch(e){ /* ignore */ }
+}
+
+// Accessibility: keyboard nav in stepper (Enter to activate)
+els(".stepper li").forEach(li=>{ li.tabIndex=0; li.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); li.click(); } }); });
+
+</script>
+</body>
+</html>

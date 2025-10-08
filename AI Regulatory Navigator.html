@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Regulatory Navigator - Dr. Adnan Masood</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .step-indicator {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .option-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .option-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .option-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        }
+
+        .option-card h3 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+        }
+
+        .option-card p {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .regulation-checkbox {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .regulation-checkbox:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .regulation-checkbox.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        }
+
+        .regulation-checkbox.correct {
+            border-color: #10b981;
+            background: #10b98115;
+        }
+
+        .regulation-checkbox.incorrect {
+            border-color: #ef4444;
+            background: #ef444415;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            margin-right: 15px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox.checked {
+            background: #667eea;
+        }
+
+        .checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+        }
+
+        .reg-content {
+            flex: 1;
+        }
+
+        .reg-content h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .reg-content p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .hint-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .hint-box strong {
+            color: #856404;
+        }
+
+        .hint-box p {
+            color: #856404;
+            margin-top: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results-summary {
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .explanation-section {
+            background: #f8f9ff;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .explanation-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .explanation-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .explanation-item:last-child {
+            border-bottom: none;
+        }
+
+        .explanation-item h4 {
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .explanation-item p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .controls-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .controls-section h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .control-item {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .control-item strong {
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+            
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 AI Regulatory Navigator</h1>
+            <p>A Graduate Lecture Interactive Quiz by Dr. Adnan Masood</p>
+        </div>
+
+        <div class="card" id="quizCard">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="step-indicator" id="stepIndicator">Step 1 of 3</div>
+            
+            <div id="quizContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = {
+            industries: [
+                {
+                    id: 'healthcare',
+                    name: 'Healthcare',
+                    description: 'Medical diagnosis, treatment planning, patient care',
+                    useCases: [
+                        {
+                            id: 'diagnostic_chatbot',
+                            name: 'AI Diagnostic Chatbot',
+                            description: 'Chatbot that provides preliminary medical diagnoses based on symptoms',
+                            hint: 'Consider: health data regulations, patient privacy, and whether you have international users',
+                            correctRegulations: ['gdpr', 'hipaa', 'eu_ai_act'],
+                            regulations: {
+                                gdpr: {
+                                    reason: 'If you have UK/EU patients, GDPR applies because you\'re processing personal health data',
+                                    controls: ['Obtain explicit consent', 'Implement data minimization', 'Ensure right to explanation', 'Conduct DPIA']
+                                },
+                                hipaa: {
+                                    reason: 'HIPAA applies to protected health information (PHI) in the US healthcare system',
+                                    controls: ['Implement Business Associate Agreements', 'Ensure data encryption', 'Maintain audit logs', 'Provide breach notification']
+                                },
+                                eu_ai_act: {
+                                    reason: 'Healthcare AI systems are classified as high-risk under the EU AI Act',
+                                    controls: ['Risk management system', 'High-quality training data', 'Technical documentation', 'Human oversight']
+                                }
+                            }
+                        },
+                        {
+                            id: 'patient_monitoring',
+                            name: 'Remote Patient Monitoring',
+                            description: 'AI system monitoring patient vitals and alerting healthcare providers',
+                            hint: 'This is a safety-critical medical device with continuous data collection',
+                            correctRegulations: ['gdpr', 'hipaa', 'eu_ai_act', 'fda'],
+                            regulations: {
+                                gdpr: {
+                                    reason: 'Continuous collection of personal health data requires GDPR compliance',
+                                    controls: ['Data protection by design', 'Regular security assessments', 'Patient consent management']
+                                },
+                                hipaa: {
+                                    reason: 'Monitoring systems handling PHI must be HIPAA compliant',
+                                    controls: ['Secure data transmission', 'Access controls', 'Emergency access procedures']
+                                },
+                                eu_ai_act: {
+                                    reason: 'Safety component in medical devices - high-risk classification',
+                                    controls: ['Conformity assessment', 'Post-market monitoring', 'Incident reporting']
+                                },
+                                fda: {
+                                    reason: 'Medical device that makes clinical decisions requires FDA clearance',
+                                    controls: ['Clinical validation studies', 'Software updates protocol', 'Quality management system']
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'finance',
+                    name: 'Financial Services',
+                    description: 'Banking, lending, investment, insurance',
+                    useCases: [
+                        {
+                            id: 'credit_scoring',
+                            name: 'AI Credit Scoring System',
+                            description: 'Automated system for evaluating loan applications and creditworthiness',
+                            hint: 'Think about fair lending laws and consumer rights to explanation',
+                            correctRegulations: ['gdpr', 'ecoa', 'eu_ai_act', 'fcra'],
+                            regulations: {
+                                gdpr: {
+                                    reason: 'Credit decisions based on personal data require GDPR compliance and right to explanation',
+                                    controls: ['Automated decision-making safeguards', 'Transparency about logic', 'Right to human review']
+                                },
+                                ecoa: {
+                                    reason: 'Equal Credit Opportunity Act prohibits discrimination in credit decisions',
+                                    controls: ['Bias testing across protected classes', 'Adverse action notices', 'Documentation of decision factors']
+                                },
+                                eu_ai_act: {
+                                    reason: 'Credit scoring is explicitly listed as high-risk under the EU AI Act',
+                                    controls: ['Algorithmic impact assessment', 'Regular bias audits', 'Model documentation']
+                                },
+                                fcra: {
+                                    reason: 'Fair Credit Reporting Act governs use of consumer data in credit decisions',
+                                    controls: ['Accuracy requirements', 'Dispute resolution process', 'Consumer notification']
+                                }
+                            }
+                        },
+                        {
+                            id: 'fraud_detection',
+                            name: 'Fraud Detection System',
+                            description: 'Real-time AI monitoring for fraudulent transactions',
+                            hint: 'Consider data protection, but also false positive impacts on customers',
+                            correctRegulations: ['gdpr', 'pci_dss', 'eu_ai_act'],
+                            regulations: {
+                                gdpr: {
+                                    reason: 'Processing personal financial data for fraud prevention requires lawful basis',
+                                    controls: ['Legitimate interest assessment', 'Data retention limits', 'Proportionality checks']
+                                },
+                                pci_dss: {
+                                    reason: 'Payment card data security standards apply to transaction monitoring',
+                                    controls: ['Secure data handling', 'Network segmentation', 'Regular security testing']
+                                },
+                                eu_ai_act: {
+                                    reason: 'Automated decisions affecting access to financial services are high-risk',
+                                    controls: ['Human oversight for account freezing', 'Audit trails', 'Appeal mechanisms']
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'employment',
+                    name: 'Human Resources',
+                    description: 'Recruitment, hiring, performance management',
+                    useCases: [
+                        {
+                            id: 'resume_screening',
+                            name: 'AI Resume Screening Tool',
+                            description: 'Automated system ranking candidates and filtering applications',
+                            hint: 'Employment decisions have strict anti-discrimination requirements in many jurisdictions',
+                            correctRegulations: ['gdpr', 'title_vii', 'eu_ai_act', 'nyc_law_144'],
+                            regulations: {
+                                gdpr: {
+                                    reason: 'Processing personal data for hiring requires transparency and fairness',
+                                    controls: ['Candidate notification', 'Data minimization', 'Retention policies']
+                                },
+                                title_vii: {
+                                    reason: 'Civil Rights Act prohibits employment discrimination based on protected characteristics',
+                                    controls: ['Disparate impact analysis', 'Regular bias testing', 'Documentation of validation studies']
+                                },
+                                eu_ai_act: {
+                                    reason: 'Employment and worker management explicitly designated as high-risk',
+                                    controls: ['Impact assessment', 'Human reviewers for final decisions', 'Contestability mechanisms']
+                                },
+                                nyc_law_144: {
+                                    reason: 'NYC requires bias audits for automated employment decision tools',
+                                    controls: ['Annual independent audit', 'Public disclosure of results', 'Candidate notification']
+                                }
+                            }
+                        },
+                        {
+                            id: 'performance_monitoring',
+                            name: 'Employee Performance AI',
+                            description: 'System monitoring productivity and generating performance scores',
+                            hint: 'Worker surveillance has privacy implications and employment law considerations',
+                            correctRegulations: ['gdpr', 'title_vii', 'eu_ai_act', 'nlra'],
+                            regulations: {
+                                gdpr: {
+                                    reason: 'Continuous employee monitoring requires clear legal basis and proportionality',
+                                    controls: ['Employee consent or legitimate interest', 'Transparency about metrics', 'Limited data retention']
+                                },
+                                title_vii: {
+                                    reason: 'Performance systems must not discriminate against protected classes',
+                                    controls: ['Validation across demographics', 'Appeals process', 'Reasonable accommodations']
+                                },
+                                eu_ai_act: {
+                                    reason: 'AI systems influencing employment terms and conditions are high-risk',
+                                    controls: ['Worker consultation', 'Right to explanation', 'Human oversight']
+                                },
+                                nlra: {
+                                    reason: 'National Labor Relations Act protects workers\' right to organize',
+                                    controls: ['Bargaining over monitoring introduction', 'No chilling effect on protected activities']
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'retail',
+                    name: 'E-Commerce & Retail',
+                    description: 'Online shopping, recommendations, customer service',
+                    useCases: [
+                        {
+                            id: 'recommendation_engine',
+                            name: 'Product Recommendation AI',
+                            description: 'Personalized product suggestions for international customers',
+                            hint: 'Consider privacy laws and algorithmic transparency for recommendations',
+                            correctRegulations: ['gdpr', 'ccpa', 'china_algo'],
+                            regulations: {
+                                gdpr: {
+                                    reason: 'Profiling EU customers for recommendations requires consent or legitimate interest',
+                                    controls: ['Cookie consent', 'Easy opt-out', 'Right to data portability']
+                                },
+                                ccpa: {
+                                    reason: 'California consumers have right to opt-out of personal data sales/sharing',
+                                    controls: ['Clear opt-out mechanism', 'Do Not Sell My Personal Information link', 'Non-discrimination']
+                                },
+                                china_algo: {
+                                    reason: 'China requires transparency in algorithmic recommendations and user choice',
+                                    controls: ['Algorithm filing with CAC', 'User option to disable personalization', 'Mainstream values compliance']
+                                }
+                            }
+                        },
+                        {
+                            id: 'chatbot_support',
+                            name: 'Customer Service Chatbot',
+                            description: 'AI chatbot handling customer inquiries and returns',
+                            hint: 'Chatbots must disclose they\'re AI in many jurisdictions',
+                            correctRegulations: ['gdpr', 'ccpa', 'eu_ai_act'],
+                            regulations: {
+                                gdpr: {
+                                    reason: 'Customer conversations contain personal data requiring protection',
+                                    controls: ['Data encryption', 'Limited retention', 'Secure processing']
+                                },
+                                ccpa: {
+                                    reason: 'California customers\' data from chatbots has privacy protections',
+                                    controls: ['Privacy notice', 'Data access requests', 'Deletion rights']
+                                },
+                                eu_ai_act: {
+                                    reason: 'Chatbots must disclose they are AI systems to users',
+                                    controls: ['Clear AI disclosure', 'Human escalation option', 'Transparency about limitations']
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 'education',
+                    name: 'Education Technology',
+                    description: 'Online learning, student assessment, tutoring',
+                    useCases: [
+                        {
+                            id: 'adaptive_learning',
+                            name: 'Adaptive Learning Platform',
+                            description: 'AI system personalizing education content for K-12 students',
+                            hint: 'Children\'s data has special protections, and educational decisions are sensitive',
+                            correctRegulations: ['gdpr', 'coppa', 'ferpa', 'eu_ai_act'],
+                            regulations: {
+                                gdpr: {
+                                    reason: 'Children\'s personal data requires enhanced protection under GDPR',
+                                    controls: ['Parental consent under age 16', 'Age verification', 'Child-appropriate privacy notices']
+                                },
+                                coppa: {
+                                    reason: 'Children\'s Online Privacy Protection Act applies to US users under 13',
+                                    controls: ['Verifiable parental consent', 'No behavioral advertising to children', 'Data minimization']
+                                },
+                                ferpa: {
+                                    reason: 'Family Educational Rights and Privacy Act protects student education records',
+                                    controls: ['School authorization', 'Limited disclosure', 'Parent access rights']
+                                },
+                                eu_ai_act: {
+                                    reason: 'AI determining educational outcomes is high-risk',
+                                    controls: ['Bias prevention', 'Human teacher oversight', 'No manipulation of vulnerable users']
+                                }
+                            }
+                        },
+                        {
+                            id: 'proctoring',
+                            name: 'AI Exam Proctoring',
+                            description: 'Automated monitoring system detecting cheating in online exams',
+                            hint: 'Biometric surveillance in education raises privacy and fairness concerns',
+                            correctRegulations: ['gdpr', 'ferpa', 'eu_ai_act', 'ada'],
+                            regulations: {
+                                gdpr: {
+                                    reason: 'Facial recognition and behavior monitoring are special category processing',
+                                    controls: ['Explicit consent', 'DPIA required', 'Strict purpose limitation']
+                                },
+                                ferpa: {
+                                    reason: 'Proctoring data becomes part of education records',
+                                    controls: ['Student/parent notification', 'Secure storage', 'Limited retention']
+                                },
+                                eu_ai_act: {
+                                    reason: 'Remote biometric identification has strict restrictions; educational AI is high-risk',
+                                    controls: ['Minimize biometric data collection', 'Human review of flags', 'Contestability']
+                                },
+                                ada: {
+                                    reason: 'Americans with Disabilities Act requires accommodations',
+                                    controls: ['Alternative testing methods', 'Reasonable accommodations', 'No discrimination']
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            allRegulations: {
+                gdpr: {
+                    name: 'GDPR (EU/UK)',
+                    description: 'General Data Protection Regulation - applies when processing EU/UK residents\' personal data'
+                },
+                hipaa: {
+                    name: 'HIPAA (US)',
+                    description: 'Health Insurance Portability and Accountability Act - protects health information in the US'
+                },
+                eu_ai_act: {
+                    name: 'EU AI Act',
+                    description: 'Risk-based AI regulation with requirements for high-risk systems'
+                },
+                fda: {
+                    name: 'FDA Regulations (US)',
+                    description: 'Food and Drug Administration oversight of medical devices including AI/ML'
+                },
+                ecoa: {
+                    name: 'ECOA (US)',
+                    description: 'Equal Credit Opportunity Act - prohibits credit discrimination'
+                },
+                fcra: {
+                    name: 'FCRA (US)',
+                    description: 'Fair Credit Reporting Act - governs consumer credit information'
+                },
+                pci_dss: {
+                    name: 'PCI DSS',
+                    description: 'Payment Card Industry Data Security Standard'
+                },
+                title_vii: {
+                    name: 'Title VII (US)',
+                    description: 'Civil Rights Act - prohibits employment discrimination'
+                },
+                nyc_law_144: {
+                    name: 'NYC Local Law 144',
+                    description: 'Requires bias audits for automated employment decision tools in NYC'
+                },
+                nlra: {
+                    name: 'NLRA (US)',
+                    description: 'National Labor Relations Act - protects workers\' rights'
+                },
+                ccpa: {
+                    name: 'CCPA/CPRA (California)',
+                    description: 'California Consumer Privacy Act - comprehensive privacy rights'
+                },
+                china_algo: {
+                    name: 'China Algorithm Regulations',
+                    description: 'Provisions on algorithmic recommendations and content regulation'
+                },
+                coppa: {
+                    name: 'COPPA (US)',
+                    description: 'Children\'s Online Privacy Protection Act'
+                },
+                ferpa: {
+                    name: 'FERPA (US)',
+                    description: 'Family Educational Rights and Privacy Act'
+                },
+                ada: {
+                    name: 'ADA (US)',
+                    description: 'Americans with Disabilities Act - requires accessibility and accommodations'
+                }
+            }
+        };
+
+        let currentStep = 'industry';
+        let selectedIndustry = null;
+        let selectedUseCase = null;
+        let selectedRegulations = new Set();
+        let quizSubmitted = false;
+
+        function updateProgress() {
+            const steps = ['industry', 'usecase', 'regulations', 'results'];
+            const currentIndex = steps.indexOf(currentStep);
+            const progress = ((currentIndex) / (steps.length - 1)) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            if (currentStep === 'results') {
+                document.getElementById('stepIndicator').textContent = 'Quiz Complete';
+            } else {
+                const stepNum = currentIndex + 1;
+                document.getElementById('stepIndicator').textContent = `Step ${stepNum} of 3`;
+            }
+        }
+
+        function renderIndustrySelection() {
+            const content = document.getElementById('quizContent');
+            content.innerHTML = `
+                <h2>Select Your Industry</h2>
+                <p style="color: #666; margin-bottom: 30px;">Choose the industry context for your AI application</p>
+                <div class="options-grid" id="industryOptions"></div>
+                <div class="button-group">
+                    <button class="btn-primary" onclick="proceedToUseCase()" id="nextBtn" disabled>
+                        Next: Choose Use Case →
+                    </button>
+                </div>
+            `;
+
+            const grid = document.getElementById('industryOptions');
+            quizData.industries.forEach(industry => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                card.innerHTML = `
+                    <h3>${industry.name}</h3>
+                    <p>${industry.description}</p>
+                `;
+                card.onclick = () => selectIndustry(industry.id);
+                grid.appendChild(card);
+            });
+        }
+
+        function selectIndustry(industryId) {
+            selectedIndustry = industryId;
+            document.querySelectorAll('#industryOptions .option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.option-card').classList.add('selected');
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function proceedToUseCase() {
+            currentStep = 'usecase';
+            updateProgress();
+            renderUseCaseSelection();
+        }
+
+        function renderUseCaseSelection() {
+            const industry = quizData.industries.find(i => i.id === selectedIndustry);
+            const content = document.getElementById('quizContent');
+            
+            content.innerHTML = `
+                <h2>Select Your AI Use Case</h2>
+                <p style="color: #666; margin-bottom: 30px;">Choose the specific application in ${industry.name}</p>
+                <div class="options-grid" id="useCaseOptions"></div>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="goBackToIndustry()">
+                        ← Back
+                    </button>
+                    <button class="btn-primary" onclick="proceedToRegulations()" id="nextBtn" disabled>
+                        Next: Select Regulations →
+                    </button>
+                </div>
+            `;
+
+            const grid = document.getElementById('useCaseOptions');
+            industry.useCases.forEach(useCase => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                card.innerHTML = `
+                    <h3>${useCase.name}</h3>
+                    <p>${useCase.description}</p>
+                `;
+                card.onclick = () => selectUseCase(useCase.id);
+                grid.appendChild(card);
+            });
+        }
+
+        function selectUseCase(useCaseId) {
+            selectedUseCase = useCaseId;
+            document.querySelectorAll('#useCaseOptions .option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.option-card').classList.add('selected');
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function goBackToIndustry() {
+            currentStep = 'industry';
+            selectedUseCase = null;
+            updateProgress();
+            renderIndustrySelection();
+            if (selectedIndustry) {
+                setTimeout(() => {
+                    const cards = document.querySelectorAll('#industryOptions .option-card');
+                    const industry = quizData.industries.find(i => i.id === selectedIndustry);
+                    const index = quizData.industries.indexOf(industry);
+                    cards[index].classList.add('selected');
+                    document.getElementById('nextBtn').disabled = false;
+                }, 100);
+            }
+        }
+
+        function proceedToRegulations() {
+            currentStep = 'regulations';
+            selectedRegulations.clear();
+            quizSubmitted = false;
+            updateProgress();
+            renderRegulationSelection();
+        }
+
+        function renderRegulationSelection() {
+            const industry = quizData.industries.find(i => i.id === selectedIndustry);
+            const useCase = industry.useCases.find(u => u.id === selectedUseCase);
+            
+            const content = document.getElementById('quizContent');
+            content.innerHTML = `<h2>Select Applicable Regulations</h2>
+                <p style="color: #666; margin-bottom: 20px;">
+                    <strong>Scenario:</strong> ${useCase.name} - ${useCase.description}
+                </p>
+                <div class="hint-box">
+                    <strong>💡 Hint:</strong>
+                    <p>${useCase.hint}</p>
+                </div>
+                <p style="color: #666; margin-bottom: 20px;">Select all regulations that apply to this use case:</p>
+                <div id="regulationsList"></div>
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="goBackToUseCase()">
+                        ← Back
+                    </button>
+                    <button class="btn-primary" onclick="submitRegulations()" id="submitBtn">
+                        Submit & Check Answers
+                    </button>
+                </div>
+            `;
+
+            const list = document.getElementById('regulationsList');
+            Object.keys(quizData.allRegulations).forEach(regId => {
+                const reg = quizData.allRegulations[regId];
+                const checkbox = document.createElement('div');
+                checkbox.className = 'regulation-checkbox';
+                checkbox.innerHTML = `
+                    <div class="checkbox" id="check-${regId}"></div>
+                    <div class="reg-content">
+                        <h4>${reg.name}</h4>
+                        <p>${reg.description}</p>
+                    </div>
+                `;
+                checkbox.onclick = () => toggleRegulation(regId);
+                list.appendChild(checkbox);
+            });
+        }
+
+        function toggleRegulation(regId) {
+            if (quizSubmitted) return;
+            
+            if (selectedRegulations.has(regId)) {
+                selectedRegulations.delete(regId);
+                document.getElementById(`check-${regId}`).classList.remove('checked');
+                event.target.closest('.regulation-checkbox').classList.remove('selected');
+            } else {
+                selectedRegulations.add(regId);
+                document.getElementById(`check-${regId}`).classList.add('checked');
+                event.target.closest('.regulation-checkbox').classList.add('selected');
+            }
+        }
+
+        function goBackToUseCase() {
+            currentStep = 'usecase';
+            updateProgress();
+            renderUseCaseSelection();
+            if (selectedUseCase) {
+                setTimeout(() => {
+                    const industry = quizData.industries.find(i => i.id === selectedIndustry);
+                    const cards = document.querySelectorAll('#useCaseOptions .option-card');
+                    const useCaseIndex = industry.useCases.findIndex(u => u.id === selectedUseCase);
+                    cards[useCaseIndex].classList.add('selected');
+                    document.getElementById('nextBtn').disabled = false;
+                }, 100);
+            }
+        }
+
+        function submitRegulations() {
+            if (quizSubmitted) {
+                showResults();
+                return;
+            }
+
+            quizSubmitted = true;
+            const industry = quizData.industries.find(i => i.id === selectedIndustry);
+            const useCase = industry.useCases.find(u => u.id === selectedUseCase);
+            const correctRegs = new Set(useCase.correctRegulations);
+
+            // Mark each regulation
+            Object.keys(quizData.allRegulations).forEach(regId => {
+                const checkbox = document.querySelector(`#check-${regId}`).closest('.regulation-checkbox');
+                const wasSelected = selectedRegulations.has(regId);
+                const shouldBeSelected = correctRegs.has(regId);
+
+                if (wasSelected && shouldBeSelected) {
+                    checkbox.classList.add('correct');
+                    checkbox.classList.remove('selected');
+                } else if (wasSelected && !shouldBeSelected) {
+                    checkbox.classList.add('incorrect');
+                    checkbox.classList.remove('selected');
+                } else if (!wasSelected && shouldBeSelected) {
+                    checkbox.classList.add('incorrect');
+                    checkbox.innerHTML += `<div style="margin-left: 39px; color: #10b981; font-size: 0.85em; margin-top: 5px;">✓ This should have been selected</div>`;
+                }
+            });
+
+            document.getElementById('submitBtn').textContent = 'View Complete Explanation →';
+        }
+
+        function showResults() {
+            currentStep = 'results';
+            updateProgress();
+            
+            const industry = quizData.industries.find(i => i.id === selectedIndustry);
+            const useCase = industry.useCases.find(u => u.id === selectedUseCase);
+            const correctRegs = new Set(useCase.correctRegulations);
+            
+            // Calculate score
+            let correct = 0;
+            let incorrect = 0;
+            
+            selectedRegulations.forEach(regId => {
+                if (correctRegs.has(regId)) {
+                    correct++;
+                } else {
+                    incorrect++;
+                }
+            });
+            
+            correctRegs.forEach(regId => {
+                if (!selectedRegulations.has(regId)) {
+                    incorrect++;
+                }
+            });
+
+            const total = correctRegs.size;
+            const score = Math.round((correct / (correct + incorrect)) * 100);
+            
+            const content = document.getElementById('quizContent');
+            content.innerHTML = `
+                <div class="results-summary">
+                    <h2>🎓 Quiz Results</h2>
+                    <div class="score-circle">${score}%</div>
+                    <p style="font-size: 1.2em; color: #666; margin-bottom: 10px;">
+                        You correctly identified <strong>${correct}</strong> out of <strong>${total}</strong> applicable regulations
+                    </p>
+                    <p style="color: #666;">
+                        ${score >= 80 ? '🌟 Excellent work!' : score >= 60 ? '👍 Good effort!' : '📚 Review the explanations below'}
+                    </p>
+                </div>
+
+                <div class="explanation-section">
+                    <h3>📋 Why These Regulations Apply</h3>
+                    <p style="color: #666; margin-bottom: 20px;">
+                        For your scenario: <strong>${useCase.name}</strong> in <strong>${industry.name}</strong>
+                    </p>
+                    ${generateExplanations(useCase)}
+                </div>
+
+                <div class="controls-section">
+                    <h4>🔒 Key Controls to Implement</h4>
+                    ${generateControlsList(useCase)}
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="restartQuiz()">
+                        🔄 Try Another Scenario
+                    </button>
+                    <button class="btn-primary" onclick="goBackToRegulations()">
+                        ← Review Your Answers
+                    </button>
+                </div>
+            `;
+        }
+
+        function generateExplanations(useCase) {
+            let html = '';
+            useCase.correctRegulations.forEach(regId => {
+                const reg = quizData.allRegulations[regId];
+                const details = useCase.regulations[regId];
+                const wasSelected = selectedRegulations.has(regId);
+                
+                html += `
+                    <div class="explanation-item">
+                        <h4>
+                            ${wasSelected ? '✅' : '❌'} 
+                            ${reg.name}
+                        </h4>
+                        <p><strong>Why it applies:</strong> ${details.reason}</p>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        function generateControlsList(useCase) {
+            let html = '';
+            let controlNumber = 1;
+            
+            useCase.correctRegulations.forEach(regId => {
+                const reg = quizData.allRegulations[regId];
+                const details = useCase.regulations[regId];
+                
+                details.controls.forEach(control => {
+                    html += `
+                        <div class="control-item">
+                            <strong>${controlNumber}. ${reg.name}</strong>
+                            ${control}
+                        </div>
+                    `;
+                    controlNumber++;
+                });
+            });
+            
+            return html;
+        }
+
+        function goBackToRegulations() {
+            quizSubmitted = false;
+            currentStep = 'regulations';
+            updateProgress();
+            renderRegulationSelection();
+            
+            // Restore previous selections
+            setTimeout(() => {
+                selectedRegulations.forEach(regId => {
+                    document.getElementById(`check-${regId}`).classList.add('checked');
+                    document.getElementById(`check-${regId}`).closest('.regulation-checkbox').classList.add('selected');
+                });
+            }, 100);
+        }
+
+        function restartQuiz() {
+            currentStep = 'industry';
+            selectedIndustry = null;
+            selectedUseCase = null;
+            selectedRegulations.clear();
+            quizSubmitted = false;
+            updateProgress();
+            renderIndustrySelection();
+        }
+
+        // Initialize quiz
+        updateProgress();
+        renderIndustrySelection();
+    </script>
+</body>
+</html>

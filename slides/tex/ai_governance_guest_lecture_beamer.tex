@@ -1,0 +1,634 @@
+
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{footline}[frame number]
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=*, itemsep=0.35em}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{multicol}
+\usepackage{tabularx}
+
+% Macros to speed up repetitive slide patterns
+\newcommand{\RegTitle}[2]{%
+  \begin{frame}[plain]
+    \centering
+    \vfill
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}\LARGE \textbf{#1}\par}
+    \vspace{0.4em}
+    {\small \itshape #2\par}
+    \vfill
+  \end{frame}
+}
+
+\newcommand{\RegDef}[2]{%
+  \begin{frame}{#1: Definition \& Scope}
+    \begin{itemize}
+      #2
+    \end{itemize}
+  \end{frame}
+}
+
+\newcommand{\RegIntuition}[2]{%
+  \begin{frame}{#1: Intuition \& Example}
+    \begin{itemize}
+      #2
+    \end{itemize}
+  \end{frame}
+}
+
+\newcommand{\RegCompliance}[2]{%
+  \begin{frame}{#1: Obligations, Enforcement \& Timeline}
+    \begin{itemize}
+      #2
+    \end{itemize}
+  \end{frame}
+}
+
+% Title metadata
+\title{From Principles to Power: \\ \Large The 2015--2025 AI Governance Turn}
+\subtitle{Laws, Standards, and What to Do Next}
+\author{Guest Lecture by Adnan Masood, PhD.}
+\institute{Graduate Seminar on AI Governance}
+\date{\today}
+
+% Section outline at the start of each section
+\AtBeginSection[]{
+  \begin{frame}{Roadmap}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\begin{document}
+
+% Title
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Opening
+\begin{frame}{How to use this deck (interactive format)}
+\begin{itemize}
+  \item \textbf{Structure per instrument}: \textit{Title} $\rightarrow$ \textit{Definition/Scope} $\rightarrow$ \textit{Intuition/Example} $\rightarrow$ \textit{Obligations/Enforcement/Timeline}.
+  \item \textbf{Class prompts}: discussion questions are embedded on many slides for think-pair-share.
+  \item \textbf{Focus}: Only the regulations, statutes, and standards covered in the assigned reading.
+  \item \textbf{What we skip}: generic definitions (``audit'', ``governance'') unless essential to a rule.
+  \item \textbf{Goal}: equip you to map use-cases to obligations across jurisdictions and standards.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Agenda}
+\tableofcontents
+\end{frame}
+
+\section{Global anchors (principles, soft law, standards)}
+
+% OECD AI Principles (2019)
+\RegTitle{OECD AI Principles (2019)}{First intergovernmental AI framework adopted by 40+ countries; later echoed by G20.}
+\RegDef{OECD AI Principles}{%
+  \item \textbf{Instrument}: Non-binding Recommendation setting 5 value-based principles (\emph{inclusive growth; human-centered values; transparency; robustness; accountability}) and 5 policy recommendations.
+  \item \textbf{Scope}: Applies to AI systems broadly (definition influenced later laws). Adopted by OECD members and adherents.
+  \item \textbf{Purpose}: Common baseline to guide national policy, standards, and cross-border cooperation.
+}
+\RegIntuition{OECD AI Principles}{%
+  \item \textbf{Intuition}: Create a shared lingua franca for ``trustworthy AI'' before binding laws emerge.
+  \item \textbf{Example}: A national AI strategy cites OECD principles to justify transparency obligations for recommender systems.
+  \item \textbf{Prompt}: Where do these principles map to \emph{binding} duties in later regimes?
+}
+\RegCompliance{OECD AI Principles}{%
+  \item \textbf{Obligations}: None directly; influential in procurement criteria and regulator guidance.
+  \item \textbf{Enforcement}: Soft law (peer pressure; policy reviews via OECD AI Policy Observatory).
+  \item \textbf{Timeline}: Adopted 2019; continuing implementation via national roadmaps and OECD tooling.
+}
+
+% UNESCO Recommendation (2021)
+\RegTitle{UNESCO Recommendation on the Ethics of AI (2021)}{First universal (193 states) normative instrument on AI ethics.}
+\RegDef{UNESCO Recommendation}{%
+  \item \textbf{Instrument}: Non-binding recommendation addressing data governance, human rights, inclusion, environmental impact.
+  \item \textbf{Scope}: Governments commit to implement via domestic policy; calls for safeguards against rights-violating AI uses.
+  \item \textbf{Interfaces}: Informs national AI strategies, public-sector policies, and education.
+}
+\RegIntuition{UNESCO Recommendation}{%
+  \item \textbf{Intuition}: A human-rights-centered anchor to shape emerging national rules.
+  \item \textbf{Example}: A country adopts a moratorium on some biometric surveillance citing UNESCO guidance.
+}
+\RegCompliance{UNESCO Recommendation}{%
+  \item \textbf{Obligations}: Programmatic—impact assessment tools, oversight mechanisms, bans for rights-incompatible uses (via domestic law).
+  \item \textbf{Enforcement}: Moral suasion; periodic monitoring by UNESCO.
+  \item \textbf{Timeline}: Adopted Nov 2021; national implementations vary 2022--2025.
+}
+
+% G7 Hiroshima / Bletchley
+\RegTitle{G7 Hiroshima Process \& Bletchley Declaration (2023)}{Multilateral commitments on generative/frontier AI safety and cooperation.}
+\RegDef{G7 \& Bletchley}{%
+  \item \textbf{Instrument}: Joint statements and principles on risk-based governance, evaluation, information sharing.
+  \item \textbf{Scope}: Voluntary; targeted at generative and ``frontier'' models and platform risks.
+}
+\RegIntuition{G7 \& Bletchley}{%
+  \item \textbf{Intuition}: Rapid coordination for fast-moving foundation models; prepare evaluation/red-teaming norms.
+  \item \textbf{Example}: Safety institutes (UK-led) test models; shared workstreams on evaluations.
+}
+\RegCompliance{G7 \& Bletchley}{%
+  \item \textbf{Obligations}: None legally binding; influence procurement and national standards.
+  \item \textbf{Timeline}: 2023 summits; follow-ons in 2024/2025 iterate on evaluation guidance.
+}
+
+% ISO/IEC 42001
+\RegTitle{ISO/IEC 42001: AI Management System (2023)}{First certifiable AI management system (AIMS) standard.}
+\RegDef{ISO/IEC 42001}{%
+  \item \textbf{Instrument}: International standard specifying requirements for an AI management system (policy, roles, risk processes).
+  \item \textbf{Scope}: Organizational-level; can be certifiable by accredited bodies.
+  \item \textbf{Fit}: Complements legal requirements (e.g., EU AI Act quality mgmt system).
+}
+\RegIntuition{ISO/IEC 42001}{%
+  \item \textbf{Intuition}: ``ISO 9001 for AI'': institutionalize governance so each AI system follows a controlled lifecycle.
+  \item \textbf{Example}: A bank certifies to 42001 to show due diligence to regulators and customers.
+}
+\RegCompliance{ISO/IEC 42001}{%
+  \item \textbf{Obligations}: Establish AIMS, risk criteria, documentation, competence, monitoring, continual improvement.
+  \item \textbf{Enforcement}: Voluntary; becomes quasi-mandatory via contracts or regulatory recognition.
+  \item \textbf{Timeline}: Published 2023; adoption accelerates 2024--2027 alongside EU AI Act roll-out.
+}
+
+% ISO/IEC 23894
+\RegTitle{ISO/IEC 23894: AI Risk Management (2023)}{Process standard aligned to ISO 31000 for AI-specific risks.}
+\RegDef{ISO/IEC 23894}{%
+  \item \textbf{Instrument}: International guidance on identifying, analyzing, evaluating, and treating AI risks.
+  \item \textbf{Scope}: System-level risk processes across lifecycle (data, model, deployment, post-market).
+}
+\RegIntuition{ISO/IEC 23894}{%
+  \item \textbf{Intuition}: A common, auditable approach to bias, robustness, safety, and explainability risk.
+  \item \textbf{Example}: Impact assessment template uses 23894 controls as checklist.
+}
+\RegCompliance{ISO/IEC 23894}{%
+  \item \textbf{Obligations}: Voluntary; often paired with NIST AI RMF and sector rules.
+  \item \textbf{Timeline}: 2023 publication; referenced by regulators and harmonized standards under EU AI Act.
+}
+
+% IEEE 7001 / 7003
+\RegTitle{IEEE 7001 \& 7003 (2021--2022)}{Transparency of autonomous systems; algorithmic bias considerations.}
+\RegDef{IEEE 7001/7003}{%
+  \item \textbf{Instrument}: Technical standards specifying transparency artifacts (7001) and bias controls (7003).
+  \item \textbf{Scope}: Design-time and evaluation-time requirements; complements law.
+}
+\RegIntuition{IEEE 7001/7003}{%
+  \item \textbf{Intuition}: Make ``explainability'' and ``bias'' tangible and testable.
+  \item \textbf{Example}: A vendor supplies a 7001 transparency statement and 7003 bias test report with their model card.
+}
+\RegCompliance{IEEE 7001/7003}{%
+  \item \textbf{Obligations}: Voluntary; may be baked into procurement and audits (e.g., NYC hiring tools).
+  \item \textbf{Timeline}: Published 2021/2022; adoption grows via assurance ecosystems.
+}
+
+\section{European Union}
+
+% EU AI Act
+\RegTitle{EU Artificial Intelligence Act (2024)}{Horizontal, risk-tiered law with GPAI/foundation-model duties; extraterritorial reach.}
+\RegDef{EU AI Act}{%
+  \item \textbf{Instrument}: EU Regulation (directly applicable) with four tiers: prohibited, high-risk, limited-risk (transparency), minimal.
+  \item \textbf{Scope}: Providers, deployers, importers placing AI on EU market or whose outputs affect people in the EU.
+  \item \textbf{High-risk set}: Safety components of regulated products and Annex III domains (e.g., employment, credit, essential services, law enforcement).
+}
+\RegIntuition{EU AI Act}{%
+  \item \textbf{Intuition}: Product-safety style, ex-ante compliance to protect fundamental rights and safety.
+  \item \textbf{Example}: An HR-screening system in Annex III must undergo conformity assessment and be registered before use.
+}
+\RegCompliance{EU AI Act}{%
+  \item \textbf{Core duties (high-risk)}: risk mgmt system; data governance; technical documentation; human oversight; accuracy/robustness/cybersecurity; CE marking; post-market monitoring.
+  \item \textbf{GPAI/foundation models}: documentation on capabilities and training-data summaries; safeguards for illegal content; additional duties for very capable models.
+  \item \textbf{Enforcement}: National market surveillance + EU AI Office; fines up to 6\% global turnover.
+  \item \textbf{Timeline (phased)}: bans early; GPAI obligations $\sim$12 months post-entry; high-risk $\sim$24 months; legacy grace windows.
+}
+
+% GDPR Art. 22
+\RegTitle{GDPR Art. 22 \& Recital 71 (2018)}{Automated decision-making limits and rights; DPIAs for high-risk processing.}
+\RegDef{GDPR ADM}{%
+  \item \textbf{Instrument}: EU data protection law provision on decisions based solely on automated processing with significant effects.
+  \item \textbf{Scope}: Requires legal basis and offers right to obtain human intervention, to express viewpoint, to contest decision.
+  \item \textbf{Interface}: Continues to apply alongside the AI Act.
+}
+\RegIntuition{GDPR ADM}{%
+  \item \textbf{Intuition}: Preserve agency where algorithms decide consequential outcomes.
+  \item \textbf{Example}: Credit denial via automated scoring must provide meaningful information and human review path.
+}
+\RegCompliance{GDPR ADM}{%
+  \item \textbf{Obligations}: Inform data subjects; ensure fairness; conduct DPIA for high-risk profiles; honor access/explanation rights (where applicable).
+  \item \textbf{Enforcement}: Data Protection Authorities; fines under GDPR regime.
+  \item \textbf{Timeline}: In force since 2018; active enforcement through DPAs.
+}
+
+% DSA
+\RegTitle{EU Digital Services Act (2022)}{Algorithmic accountability for very large online platforms (VLOPs) and transparency to users.}
+\RegDef{DSA}{%
+  \item \textbf{Instrument}: EU Regulation imposing risk assessments, independent audits, recommender transparency and user choice (including non-profiled feed).
+  \item \textbf{Scope}: Platforms meeting VLOP thresholds; general duties across intermediaries.
+}
+\RegIntuition{DSA}{%
+  \item \textbf{Intuition}: Mitigate systemic risks amplified by recommender algorithms (disinformation, harms to minors).
+  \item \textbf{Example}: A VLOP must document risk mitigations for recommender systems and offer a non-profiling option.
+}
+\RegCompliance{DSA}{%
+  \item \textbf{Obligations}: Annual systemic risk assessments; transparency reporting; access to data for vetted researchers; labeling for manipulated media.
+  \item \textbf{Enforcement}: European Commission for VLOPs; national coordinators otherwise.
+  \item \textbf{Timeline}: Effective 2023 for VLOPs; full application 2024.
+}
+
+% EU Liability updates
+\RegTitle{EU AI \& Product Liability Updates (proposed)}{Ease victim redress for AI-caused harm; clarify software as product.}
+\RegDef{EU Liability}{%
+  \item \textbf{Instrument}: AI Liability Directive (proposal) and revised Product Liability Directive.
+  \item \textbf{Scope}: Presumptions of causality in certain non-compliance; disclosure obligations; extends strict liability to software and updates.
+}
+\RegIntuition{EU Liability}{%
+  \item \textbf{Intuition}: Close proof gaps where opaque AI complicates causation.
+  \item \textbf{Example}: Court can order disclosure of technical docs from provider to injured party.
+}
+\RegCompliance{EU Liability}{%
+  \item \textbf{Status}: Advancing in legislative process; expected to complement AI Act enforcement window.
+  \item \textbf{Impact}: Increases litigation exposure; elevates documentation and logging importance.
+}
+
+\section{China}
+
+% China Algorithms
+\RegTitle{China Algorithmic Recommendation Provisions (2022)}{Record-filing, transparency, and user controls for recommender systems.}
+\RegDef{China Recommenders}{%
+  \item \textbf{Instrument}: CAC-led binding rules for algorithmic recommendation services.
+  \item \textbf{Scope}: Disclosure of basic principles, purposes, and mechanisms; provide opt-out and non-targeting options; prohibit illegal data use and harmful amplification.
+  \item \textbf{Registration}: Algorithm record-filing with CAC for certain services.
+}
+\RegIntuition{China Recommenders}{%
+  \item \textbf{Intuition}: Align platforms with state policy goals and reduce harmful social effects of algorithms.
+  \item \textbf{Example}: Platform offers ``no personalization'' toggle and publishes algorithm filing ID.
+}
+\RegCompliance{China Recommenders}{%
+  \item \textbf{Obligations}: Filing; transparency; content and data-use constraints; complaint handling.
+  \item \textbf{Enforcement}: CAC inspections, orders, fines; public registry.
+  \item \textbf{Timeline}: Effective March 1, 2022.
+}
+
+% China Deep Synthesis
+\RegTitle{China Deep Synthesis Provisions (2023)}{Labeling and controls for AI-generated (deepfake) content.}
+\RegDef{China Deep Synthesis}{%
+  \item \textbf{Instrument}: Binding rules requiring clear labeling of AI-generated/altered media; user identity verification; log retention.
+  \item \textbf{Scope}: Providers of deep synthesis tools and services to the public.
+}
+\RegIntuition{China Deep Synthesis}{%
+  \item \textbf{Intuition}: Prevent deception and misuse of AI media; ensure traceability.
+  \item \textbf{Example}: Video app watermarks AI-altered clips and keeps processing logs.
+}
+\RegCompliance{China Deep Synthesis}{%
+  \item \textbf{Obligations}: Prominent labeling; security assessments; misuse handling.
+  \item \textbf{Timeline}: Effective Jan 10, 2023; enforcement via CAC \& other agencies.
+}
+
+% China Generative AI
+\RegTitle{China Interim Measures for Generative AI (2023)}{Security reviews, content controls, algorithm filing, and output labeling.}
+\RegDef{China Generative AI}{%
+  \item \textbf{Instrument}: Binding interim measures covering public generative services.
+  \item \textbf{Scope}: Accuracy and legality of content; safeguards to reflect ``core socialist values''; registration and assessments.
+}
+\RegIntuition{China Generative AI}{%
+  \item \textbf{Intuition}: License-and-control regime for public genAI amid rapid deployment.
+  \item \textbf{Example}: Chatbot provider performs model updates after generating illegal content and reports incident to regulator.
+}
+\RegCompliance{China Generative AI}{%
+  \item \textbf{Obligations}: Algorithm filing; security assessment; watermarking/labeling; content remediation; user real-name verification.
+  \item \textbf{Enforcement}: CAC and co-regulators; corrective orders and fines.
+  \item \textbf{Timeline}: Effective Aug 15, 2023.
+}
+
+\section{United States (federal \& state)}
+
+% US EO
+\RegTitle{US Executive Order on Safe, Secure, and Trustworthy AI (2023)}{Whole-of-government directives on safety standards, procurement, and frontier model oversight.}
+\RegDef{US EO on AI}{%
+  \item \textbf{Instrument}: Executive policy instructing agencies (e.g., NIST, DHS, HHS, DoL) to set AI safety, security, and civil-rights guardrails.
+  \item \textbf{Scope}: Federal use and procurement; notification for very large training runs; watermarking guidance; worker protections.
+}
+\RegIntuition{US EO on AI}{%
+  \item \textbf{Intuition}: Use executive power to coordinate in absence of omnibus federal statute.
+  \item \textbf{Example}: Federal contractors asked to align to NIST AI RMF and safety test guidance.
+}
+\RegCompliance{US EO on AI}{%
+  \item \textbf{Obligations}: Agency actions; standards and reporting that cascade to vendors.
+  \item \textbf{Enforcement}: Administrative (procurement leverage; OMB oversight).
+  \item \textbf{Timeline}: Issued Oct 2023; rolling agency deliverables through 2024--2025.
+}
+
+% NIST AI RMF
+\RegTitle{NIST AI Risk Management Framework 1.0 (2023)}{US voluntary framework: Govern, Map, Measure, Manage.}
+\RegDef{NIST AI RMF}{%
+  \item \textbf{Instrument}: Consensus guidance with Playbook; profiles for sectors and genAI emerging.
+  \item \textbf{Scope}: Any organization developing or using AI; complements ISO 23894/42001.
+}
+\RegIntuition{NIST AI RMF}{%
+  \item \textbf{Intuition}: Practical scaffolding for trustworthy AI without prescriptive law.
+  \item \textbf{Example}: A deployer builds an AIA aligned to RMF functions with metrics for bias and robustness.
+}
+\RegCompliance{NIST AI RMF}{%
+  \item \textbf{Obligations}: Voluntary; often required in federal procurement and state laws' safe harbors.
+  \item \textbf{Timeline}: v1.0 Jan 2023; continuing updates and profiles.
+}
+
+% NYC LL 144
+\RegTitle{NYC Local Law 144 (effective 2023)}{Bias audits and notices for automated employment decision tools (AEDTs).}
+\RegDef{NYC LL 144}{%
+  \item \textbf{Instrument}: City law mandating annual independent bias audits and candidate notices for AEDTs used in NYC.
+  \item \textbf{Scope}: Hiring and promotion tools that substantially assist automated decisions.
+}
+\RegIntuition{NYC LL 144}{%
+  \item \textbf{Intuition}: Transparency and disparate-impact checks in employment where harms are acute.
+  \item \textbf{Example}: Vendor publishes public audit summary with selection rate ratios across demographics.
+}
+\RegCompliance{NYC LL 144}{%
+  \item \textbf{Obligations}: Pre-use audit; candidate notice and opt-out; data retention for auditing.
+  \item \textbf{Enforcement}: City Department of Consumer and Worker Protection; penalties per violation.
+}
+
+% Illinois AIVIA
+\RegTitle{Illinois AI Video Interview Act (2019)}{Notice, explanation, consent for AI analysis of interview videos; reporting.}
+\RegDef{Illinois AIVIA}{%
+  \item \textbf{Instrument}: State statute governing use of AI to evaluate video interviews.
+  \item \textbf{Scope}: Employers using AI analysis in hiring; obligations around consent and data handling.
+}
+\RegIntuition{Illinois AIVIA}{%
+  \item \textbf{Intuition}: Early, narrow use-case law to protect applicants.
+  \item \textbf{Example}: Employer must explain how AI evaluates candidates and obtain express consent.
+}
+\RegCompliance{Illinois AIVIA}{%
+  \item \textbf{Obligations}: Notice, explanation, consent; delete videos upon request; demographic reporting pilot.
+  \item \textbf{Enforcement}: State AG; private remedies depend on context.
+}
+
+% Colorado SB 24-205 + SB 21-169
+\RegTitle{Colorado AI Acts: SB 21-169 (Insurance) \& SB 24-205 (General AI)}{Bias prohibitions in insurance; reasonable care, impact assessments, and transparency for high-risk AI.}
+\RegDef{Colorado AI Laws}{%
+  \item \textbf{Instrument}: Sectoral rule for insurance unfair discrimination; broad AI statute imposing duties on developers and deployers of high-risk AI.
+  \item \textbf{Scope}: High-risk = significant risk of discrimination or significant effects on consumers (e.g., credit, employment, housing, insurance).
+}
+\RegIntuition{Colorado AI Laws}{%
+  \item \textbf{Intuition}: Blend of consumer protection and civil-rights logic applied to AI outcomes.
+  \item \textbf{Example}: Insurer maintains governance program and bias testing under SB 21-169; software provider performs impact assessment and publishes summary under SB 24-205.
+}
+\RegCompliance{Colorado AI Laws}{%
+  \item \textbf{Obligations}: Reasonable care to avoid algorithmic discrimination; impact assessments; incident reporting; transparency to consumers interacting with AI.
+  \item \textbf{Enforcement}: State Attorney General; safe-harbor concepts via documented risk programs.
+  \item \textbf{Timeline}: 2021 (insurance regs phased in 2023); 2024 AI Act with staged dates.
+}
+
+\section{United Kingdom}
+
+% UK White Paper
+\RegTitle{UK AI Regulation White Paper (2023)}{Principles-first, regulator-led approach (no omnibus Act yet).}
+\RegDef{UK White Paper}{%
+  \item \textbf{Instrument}: Policy setting five cross-sector principles (safety, transparency, fairness, accountability, contestability).
+  \item \textbf{Scope}: Implemented via existing regulators (ICO, CMA, FCA, MHRA, etc.).
+}
+\RegIntuition{UK White Paper}{%
+  \item \textbf{Intuition}: Agile, innovation-friendly governance via guidance and sector supervision.
+  \item \textbf{Example}: ICO issues explainability guidance for ADM under UK GDPR; CMA principles for foundation models competition.
+}
+\RegCompliance{UK White Paper}{%
+  \item \textbf{Obligations}: Non-binding principles; regulators incorporate into expectations and codes.
+  \item \textbf{Related law}: Online Safety Act 2023 imposes algorithmic risk duties for large platforms.
+}
+
+\section{Canada}
+
+% AIDA
+\RegTitle{Canada AIDA (Bill C-27, proposed)}{High-impact AI obligations; AI \& Data Commissioner oversight.}
+\RegDef{Canada AIDA}{%
+  \item \textbf{Instrument}: Proposed federal law as part of C-27; focuses on ``high-impact'' AI designated by regulation.
+  \item \textbf{Scope}: Risk assessments, mitigation, monitoring, incident reporting; prohibits harmful intent uses.
+}
+\RegIntuition{Canada AIDA}{%
+  \item \textbf{Intuition}: EU-like focus on high-impact uses with flexible designation via regulations.
+  \item \textbf{Example}: Provider documents risks and mitigation for an AI used in credit decisions; keeps records for audits.
+}
+\RegCompliance{Canada AIDA}{%
+  \item \textbf{Enforcement}: AI \& Data Commissioner; administrative and criminal penalties for egregious breaches.
+  \item \textbf{Status}: Passed House (2023); under Senate review through 2025.
+}
+
+% Canada ADM Directive
+\RegTitle{Canada Directive on Automated Decision-Making (2019)}{Mandatory Algorithmic Impact Assessment (AIA) for federal services.}
+\RegDef{Canada ADM Directive}{%
+  \item \textbf{Instrument}: Treasury Board directive; binding on federal departments.
+  \item \textbf{Scope}: Impact levels I--IV drive controls (peer review, source code openness, human oversight); public inventory of systems.
+}
+\RegIntuition{Canada ADM Directive}{%
+  \item \textbf{Intuition}: Governance-by-procurement and transparency for public-sector ADM.
+  \item \textbf{Example}: Immigration triage tool undergoes AIA and publishes overview.
+}
+\RegCompliance{Canada ADM Directive}{%
+  \item \textbf{Obligations}: AIA; documentation; human-in-the-loop at higher levels; notices to affected individuals.
+  \item \textbf{Enforcement}: Treasury Board oversight and audits.
+}
+
+\section{Asia-Pacific (selected)}
+
+% South Korea
+\RegTitle{South Korea Framework Act on AI (2025)}{Promotional law with transparency/risk duties for high-impact AI; effective 2026.}
+\RegDef{Korea AI Framework}{%
+  \item \textbf{Instrument}: National framework balancing innovation and trustworthy AI.
+  \item \textbf{Scope}: ``High-impact'' categories (e.g., health, finance); labeling for AI-generated content in contexts; coordination across ministries.
+}
+\RegIntuition{Korea AI Framework}{%
+  \item \textbf{Intuition}: Moderate guardrails with relatively light penalties; administrative guidance-forward.
+  \item \textbf{Example}: Financial AI adheres to transparency guidance; deployer labels AI content per sector rules.
+}
+\RegCompliance{Korea AI Framework}{%
+  \item \textbf{Obligations}: Risk management and transparency for designated AI; fines at administrative scale.
+  \item \textbf{Timeline}: Promulgated Jan 2025; enters into force Jan 2026.
+}
+
+% Japan
+\RegTitle{Japan Basic Act on AI Promotion (2025)}{Principle-based, non-penal statute to steer policy and coordination.}
+\RegDef{Japan AI Act}{%
+  \item \textbf{Instrument}: Framework law promoting AI R\&D and responsible use; establishes strategic council.
+  \item \textbf{Scope}: No direct private-sector obligations; leverages existing laws and guidelines.
+}
+\RegIntuition{Japan AI Act}{%
+  \item \textbf{Intuition}: Keep innovation pace high while using soft-law to manage risks.
+  \item \textbf{Example}: Industry follows METI/MIC governance guidelines aligned with OECD principles.
+}
+\RegCompliance{Japan AI Act}{%
+  \item \textbf{Obligations}: Voluntary adherence; sector regulators issue guidance as needed.
+  \item \textbf{Timeline}: Effective Sept 2025.
+}
+
+% Singapore
+\RegTitle{Singapore Model AI Governance Framework \& AI Verify}{Detailed voluntary guidance and a testing toolkit for AI governance.}
+\RegDef{Singapore Framework}{%
+  \item \textbf{Instrument}: Model governance framework (v2/v3) and AI Verify testing suite.
+  \item \textbf{Scope}: Practical controls (ops mgmt, stakeholder communication, transparency); pilot assurance reports.
+}
+\RegIntuition{Singapore Framework}{%
+  \item \textbf{Intuition}: Market-led assurance that can scale into certification; procurement lever.
+  \item \textbf{Example}: Vendor provides AI Verify report with claims and test evidence.
+}
+\RegCompliance{Singapore Framework}{%
+  \item \textbf{Obligations}: Voluntary; increasingly referenced in public-sector procurements.
+}
+
+\section{Latin America}
+
+% Brazil
+\RegTitle{Brazil AI Bill (PL 21/20; Senate redraft 2023)}{Toward risk-based obligations and an oversight body; building on LGPD ADM rights.}
+\RegDef{Brazil AI Bill}{%
+  \item \textbf{Instrument}: Pending legislation; Senate draft strengthens duties and rights incl. explanations.
+  \item \textbf{Scope}: Critical/high-risk use-cases flagged; complements LGPD Art. 20 automated decision rights.
+}
+\RegIntuition{Brazil AI Bill}{%
+  \item \textbf{Intuition}: EU-inspired structure adapted to Brazil's constitutional and consumer law context.
+  \item \textbf{Example}: Credit-scoring providers required to provide logic information and redress channels.
+}
+\RegCompliance{Brazil AI Bill}{%
+  \item \textbf{Status}: Under debate; expect phased implementation after passage.
+}
+
+\section{Africa (selected rights in ADM)}
+
+\RegTitle{Kenya Data Protection Act (2019) -- ADM Rights}{GDPR-style right to human review for solely automated, consequential decisions.}
+\RegDef{Kenya ADM Rights}{%
+  \item \textbf{Instrument}: Data protection statute with ADM clauses.
+  \item \textbf{Scope}: Individuals can request human intervention and challenge automated decisions.
+}
+\RegIntuition{Kenya ADM Rights}{%
+  \item \textbf{Intuition}: Rights-forward approach to algorithmic decisions in emerging markets.
+  \item \textbf{Example}: Fintech lending app provides manual review path for adverse decisions.
+}
+\RegCompliance{Kenya ADM Rights}{%
+  \item \textbf{Enforcement}: Office of the Data Protection Commissioner; complaints and audits.
+}
+
+\RegTitle{Nigeria Data Protection Act (2023) -- ADM Rights}{Transparency and challenge rights for impactful automated decisions.}
+\RegDef{Nigeria ADM Rights}{%
+  \item \textbf{Instrument}: National data protection law modernizing ADM controls.
+  \item \textbf{Scope}: Notice and appeal routes for solely automated, significant decisions.
+}
+\RegIntuition{Nigeria ADM Rights}{%
+  \item \textbf{Intuition}: Align with global privacy norms; rein-in opaque scoring tools.
+  \item \textbf{Example}: Mobile credit scoring subject to user contestation and oversight.
+}
+\RegCompliance{Nigeria ADM Rights}{%
+  \item \textbf{Enforcement}: Nigeria Data Protection Commission; guidance emerging.
+}
+
+\section{Council of Europe}
+
+\RegTitle{Council of Europe AI Convention (draft 2024/25)}{First binding human-rights-centered AI treaty (pending adoption).}
+\RegDef{CoE AI Convention}{%
+  \item \textbf{Instrument}: Multilateral treaty focusing on human rights, democracy, rule of law safeguards for AI.
+  \item \textbf{Scope}: Public sector and possibly private when performing public functions; risk assessments; oversight.
+}
+\RegIntuition{CoE AI Convention}{%
+  \item \textbf{Intuition}: Create a transnational floor for rights-preserving AI governance across Europe (EU and non-EU).
+}
+\RegCompliance{CoE AI Convention}{%
+  \item \textbf{Status}: Text finalized in committee; open for signature expected 2024/25; domestic ratifications to follow.
+}
+
+\section{Comparative lenses}
+
+\begin{frame}{Comparative models at a glance}
+\begin{tabularx}{\linewidth}{@{}l X X X@{}}
+\toprule
+ & \textbf{EU (AI Act)} & \textbf{US (EO/NIST \& States)} & \textbf{China (CAC rules)}\\
+\midrule
+Style & Risk-tiered, prescriptive & Sectoral, enforcement-led, voluntary standards & Category-specific, licensing/content control\\
+Scope & Providers \& deployers, extraterritorial & Agencies \& sectors; state patchwork & Public-facing platforms/services\\
+Duties & Ex-ante conformity, docs, oversight & Impact audits (NYC), reasonable care (CO), notices & Filing, labeling, security reviews, value alignment\\
+Teeth & Up to 6\% turnover & AG/FTC/CFPB enforcement; civil rights & Administrative orders; fines; registration\\
+\bottomrule
+\end{tabularx}
+\end{frame}
+
+\begin{frame}{Standards crosswalk (quick map)}
+\begin{itemize}
+  \item \textbf{EU AI Act} $\leftrightarrow$ \emph{ISO/IEC 42001} (quality management) \& \emph{ISO/IEC 23894} (risk), plus IEEE 7001/7003 for artifacts.
+  \item \textbf{US NIST AI RMF} $\leftrightarrow$ maps cleanly to ISO 23894 functions; often used as practical playbook.
+  \item \textbf{NYC LL 144} $\leftrightarrow$ IEEE 7003 bias considerations; independent audit reporting patterns.
+\end{itemize}
+\end{frame}
+
+\section{Case labs (interactive)}
+
+\begin{frame}{Case Lab \#1: Hiring across NYC and EU}
+\begin{itemize}
+  \item You deploy an AI screening tool in NYC and across the EU.
+  \item \textbf{Discuss}: What documents and tests must exist \emph{before} go-live? Who signs off? What public disclosures are required?
+  \item \textbf{Hint}: NYC LL 144 (audit+notice) + EU AI Act (Annex III HR high-risk) + GDPR ADM rights.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Case Lab \#2: Generative AI feature in a consumer app (US, EU, China)}
+\begin{itemize}
+  \item You add an image generator and chatbot available globally.
+  \item \textbf{Discuss}: Labeling/watermarking, security reviews, content filters, and timeline differences for EU (transparency), US (voluntary/NIST), China (filing and content rules).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Case Lab \#3: Insurance pricing model (Colorado, EU)}
+\begin{itemize}
+  \item \textbf{Discuss}: SB 21-169 unfair discrimination testing; EU Act high-risk under essential services; documentation and monitoring regimes.
+\end{itemize}
+\end{frame}
+
+\section{Implementation playbook}
+
+\begin{frame}{Minimal viable AI governance program (reg-driven)}
+\begin{itemize}
+  \item \textbf{Inventory \& classify}: map systems to jurisdictional obligations (EU high-risk, NYC AEDT, CO high-risk).
+  \item \textbf{Impact/risk assessments}: adopt NIST AI RMF/ISO 23894 aligned templates; store technical files.
+  \item \textbf{Human oversight}: define roles and escalation paths per use-case.
+  \item \textbf{Bias \& robustness testing}: pre-deployment and periodic; vendor attestations; logs for audits.
+  \item \textbf{Transparency}: user notices; model cards; deepfake labeling where required.
+  \item \textbf{Post-market monitoring}: incident reporting triggers; regression guardrails for updates.
+\end{itemize}
+\end{frame}
+
+\section{Appendix \& wrap-up}
+
+\begin{frame}{Key dates (selected, 2024--2027)}
+\begin{itemize}
+  \item EU AI Act: bans and governance early; GPAI $\sim$2025; high-risk $\sim$2026; full ramp by 2027.
+  \item China: recommender (2022) \textrightarrow{} deep synthesis (2023) \textrightarrow{} genAI (2023) in force.
+  \item US: EO deliverables rolling; NYC LL 144 in force 2023; CO AI 2024 staged.
+  \item Canada: AIDA progress through 2025.
+  \item Korea: Framework Act in force 2026.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Discussion prompts to take home}
+\begin{itemize}
+  \item Where do standards create \emph{de facto} safe harbors across regimes?
+  \item What is the strongest extraterritorial hook you must plan for in your product?
+  \item How would you evidence ``reasonable care'' if audited tomorrow?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Summary}
+\begin{itemize}
+  \item Convergence on core duties: risk assessment, documentation, transparency, human oversight, monitoring.
+  \item Divergence in structure: EU prescriptive tiers; US sectoral + state patchwork; China licensing/control; UK/Japan principle-led.
+  \item Practical path: build to the strictest applicable regime; evidence through standards-aligned artifacts.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[plain]
+\centering
+\Huge \textbf{Q \& A}
+\end{frame}
+
+\end{document}
